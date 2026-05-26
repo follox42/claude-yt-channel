@@ -112,7 +112,8 @@ EOF
 ok "config/owner.json written"
 
 # Patch _channels.json
-~/.local/bin/python3 - <<EOF || python3 - <<EOF
+PY="$(command -v python3 || echo ~/.local/bin/python3)"
+"$PY" - <<EOF
 import json
 with open('identities/_channels.json') as f: d = json.load(f)
 d['owner_id'] = '${OWNER_ID}'
