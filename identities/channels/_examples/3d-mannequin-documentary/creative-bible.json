@@ -1,0 +1,177 @@
+{
+  "_schema_version": 2,
+  "channel_slug": "3d-mannequin-documentary",
+  "_note": "EXAMPLE creative-bible inspired by 'Fern' YouTube channel (20M views/month). 3D mannequin documentary format works for: bizarre history, true crime, mysteries, dark stories, lost civilizations. Higgsfield, Meta AI, Google Flow all handle this style natively. Discovered via Jacksons AI tutorial 2026-05-27.",
+
+  "style_signature": {
+    "label": "3d-mannequin-documentary-cinematic",
+    "description": "Vertical/horizontal 3D-rendered scenes with faceless mannequin characters (smooth heads, monochrome suits in red/blue/grey/black). Cinematic dark lighting, slow camera moves, dramatic narration. Each scene = single 3D environment with 2-3 mannequins acting out an event. Aesthetic: stylized minimalism meets documentary realism. Inspired by Fern, Meet Arnold, and similar channels pulling millions of views monthly with $6+ RPM.",
+
+    "reference_outliers": [
+      {
+        "channel_name": "Fern",
+        "video_url": "https://youtube.com/@Fern",
+        "views_per_month": 20000000,
+        "what_to_borrow": "Mannequin character design (suit + smooth head), dramatic music-synced cuts, documentary narration with emotion shifts"
+      },
+      {
+        "channel_name": "Meet Arnold",
+        "what_to_borrow": "Cinematic camera moves, dark lighting, sepia-cinematic grade"
+      }
+    ],
+
+    "key_visual_techniques": [
+      "Faceless 3D mannequin characters (smooth featureless heads)",
+      "Monochrome suit colors (red / blue / grey / black) — one color per character role",
+      "Soft cinematic lighting (key + rim, no harsh shadows)",
+      "Camera tracking + slow zoom shots (no static framing)",
+      "Color grading: cinematic teal-and-orange OR sepia-warm for historical",
+      "Subtle film grain overlay (4-6% opacity)",
+      "Music-synced cuts on bass hits + drops",
+      "Yellow / white Impact text overlays on hook + twist moments",
+      "Lower-third dark gradient to anchor captions"
+    ],
+
+    "production_recipe": {
+      "primary_tool": "hybrid",
+      "remotion_components": [
+        "<TextOverlayShort>",
+        "<VHSGrain> (low opacity for film grain)",
+        "<HookCaption> (yellow keyword highlight)"
+      ],
+      "asset_sources_per_scene_type": {
+        "narrator_face": "none (no on-screen narrator)",
+        "scene_b_roll": "meta-flow-gen (style: '3d mannequin documentary, faceless characters, cinematic') for free unlimited gens",
+        "scene_b_roll_premium": "higgsfield-generate with reference image of mannequin (Soul ID for character consistency)",
+        "ui_screenshots": "n/a",
+        "background_loop": "n/a (full cinematic)",
+        "emoji_reactions": "n/a",
+        "text_overlays": "Remotion <HookCaption> with yellow keyword highlight"
+      },
+      "complexity_score": 3,
+      "_note": "Tier 0 (Meta AI / Google Flow) sufficient for 90% of shots. Use Higgsfield only when recurring character consistency required (e.g. 'the red-suit mannequin returns in every video')."
+    },
+
+    "color_palette": {
+      "primary": "#C53030",
+      "secondary": "#2D3748",
+      "bg": "#0A0A0C",
+      "accent": "#FFD700"
+    },
+
+    "aspect_ratio": "9:16",
+    "duration_range_sec": [45, 60],
+    "_note_long_form": "Same style scales to long-form 8-30min (Fern's actual format). For long-form: increase duration_range to [480, 1800] and use chapter mode with 12-30 chapters."
+  },
+
+  "characters": {
+    "mode": "small-cast",
+    "_note": "2-3 recurring mannequin characters give the channel its signature. Train via character-forge with Higgsfield Soul ID.",
+    "cast": [
+      {
+        "name": "Narrator-Red",
+        "role": "primary protagonist",
+        "appearance": "Faceless mannequin in a deep-red business suit, white shirt, black tie. Stands neutral. Smooth featureless head.",
+        "soul_reference_id": null,
+        "_status": "to_train"
+      },
+      {
+        "name": "Counterpart-Blue",
+        "role": "secondary character (antagonist or co-protagonist)",
+        "appearance": "Faceless mannequin in navy-blue suit. Same body structure as Narrator-Red.",
+        "soul_reference_id": null,
+        "_status": "to_train"
+      }
+    ]
+  },
+
+  "voice": {
+    "mode": "elevenlabs-ai",
+    "elevenlabs": {
+      "voice_id": "ErXwobaYiN016d6Wd6Y8",
+      "voice_name": "Antoni",
+      "tone": "dramatic-documentary-narration",
+      "stability": 0.55,
+      "similarity_boost": 0.85,
+      "_v3_emotion_tags_supported": ["[whisper]", "[dramatic]", "[calm]", "[serious]", "[laugh]"]
+    },
+    "language": "en",
+    "accent": "neutral-american-warm"
+  },
+
+  "music": {
+    "mode": "stock-library",
+    "stock_library": "youtube-audio-library",
+    "_curated_tracks_by_mood": {
+      "tense-cinematic-build": ["Never Don't Stop", "Yacoby"],
+      "epic-orchestral-rise": ["Moon Vision", "The Road To Mordor"],
+      "epic-orchestral-hit": ["The Marble Cinematic University"],
+      "subtle-piano-fade": ["The Off-White Lotus"],
+      "_source": "YouTube Audio Library, filter genre=Cinematic, mood=Dramatic/Tense/Epic"
+    },
+    "genre_per_scene_type": {
+      "hook": "tense-cinematic-build",
+      "buildup": "epic-orchestral-rise",
+      "payoff": "epic-orchestral-hit",
+      "outro": "subtle-piano-fade"
+    },
+    "lufs_target": -10,
+    "ducking_db": -8
+  },
+
+  "asset_sourcing_priority": [
+    "meta-flow-gen",
+    "higgsfield-soul-id",
+    "higgsfield-generic",
+    "footage-hunter-stock"
+  ],
+
+  "text_overlay": {
+    "font_family": "Impact",
+    "font_weight": 900,
+    "case": "uppercase",
+    "color": "#FFD700",
+    "stroke_color": "#000000",
+    "stroke_width_px": 6,
+    "position_default": "top-center",
+    "animation_in": "pop-spring",
+    "highlight_keyword_color": "#FFFFFF",
+    "max_chars_per_line": 18,
+    "min_font_size_pct_of_height": 9
+  },
+
+  "captions": {
+    "burn_mode": "auto",
+    "highlight_word_color": "#FFD700",
+    "font_size_pct": 6,
+    "position": "bottom-center-25pct"
+  },
+
+  "thumbnail_style": {
+    "pattern_label": "mannequin-closeup-with-bold-text-and-arrow",
+    "pattern_description": "Closeup on a 3D mannequin character (red or blue suit), big yellow Impact text top with 3-5 words ('THE SECRET', 'WHAT THEY HID', etc.), red arrow pointing to a key detail in the scene. Dark cinematic background.",
+    "text_max_words": 5,
+    "text_color": "#FFD700",
+    "text_stroke_color": "#000000",
+    "color_contrast_target": "very-high",
+    "variants_to_generate": 3
+  },
+
+  "delivery": {
+    "platform_primary": "youtube_shorts",
+    "_also_works_for": ["youtube_long", "tiktok", "instagram_reels"],
+    "fps": 30,
+    "bitrate_kbps": 8000,
+    "codec": "h264"
+  },
+
+  "anti_detect": {
+    "vary_thumbnails": true,
+    "vary_titles": true,
+    "min_hours_between_uploads": 4,
+    "max_per_day_per_channel": 3,
+    "human_touch_every_n_videos": 3
+  },
+
+  "_starter_master_prompt_for_claude": "You are creating a 3D mannequin documentary YouTube Short. Style: faceless mannequins in monochrome suits, cinematic dark lighting, music-synced cuts, yellow Impact text overlays, dramatic ElevenLabs narration with [emotion] tags. Output 4-6 chapters of 8-12s each, with multi-shot prompts for Seedance/Google Flow. Topic: __TOPIC__. Generate in this order: (1) hook title (2) 4-6 chapter breakdown (3) per-chapter voiceover with [emotion] tags (4) multi-shot visual prompts (5) text overlay placements (6) music cue per chapter (7) thumbnail concepts ×3."
+}

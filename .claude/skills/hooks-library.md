@@ -97,6 +97,26 @@ Highly visual, low narration in first second
 Best for: rebuilds trust, authenticity-driven channels
 Use sparingly — channels that overuse get tagged as manipulative
 
+### 13. **Outlier mythbusting** (added 2026-05-27 per WOLF Money tutorial)
+> "Everyone thinks [common belief], but here's the truth..."
+> *Visual: split-screen X vs Y, or red-cross over the myth*
+
+Best for: gaming, life-hacks, science, finance, productivity
+Why it works: outlier-friendly format because:
+- Curiosity gap (you THINK X, reality is Y)
+- Verifiable (visual proof)
+- Replayable (people share with friends to settle debates)
+- High completion rate (must see the answer)
+
+Wolf Money's $1k/day playbook:
+1. Find a niche with active outliers (views ≥ 100× channel median)
+2. Pick a common belief in that niche
+3. Spend 3-4x more time than competitors on production
+4. Visual A/B proof (1-minute version vs 10-hour version)
+5. Length 30+ min for long-form RPM gains ($6+ niches)
+
+For Shorts: condense to "Most people [do X]. Watch what happens when you [do Y]" + 30s proof.
+
 ## Hook engineering rules
 
 | Rule | Why |

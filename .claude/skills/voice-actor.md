@@ -11,6 +11,22 @@ isolation: project
 
 Convert the script's `voiceover` text into MP3 audio files via ElevenLabs API, using the channel's locked voice for consistency.
 
+**Supports ElevenLabs V3 emotion tags** (per Jacksons AI 2026-05-27 tutorial):
+- `[whisper]` — whispered delivery
+- `[dramatic]` — dramatic emphasis
+- `[laugh]` — laughter
+- `[excited]` / `[calm]` / `[serious]` — tone shifts
+- `[music]` — instrumental swell hint (not parsed as audio, used by music-composer for ducking sync)
+
+Example voiceover text from script-smith:
+```
+[dramatic] It's the 4th of March, 2023. A marble hall in downtown Dubai.
+[calm] A man walks onto the stage. He clicks a remote. The lights dim.
+[whisper] Behind him, something appears on the screen...
+```
+
+Tags between `[brackets]` are parsed as control instructions, not spoken.
+
 ## Inputs
 
 - `run_id` (required)
@@ -73,6 +89,8 @@ Convert the script's `voiceover` text into MP3 audio files via ElevenLabs API, u
 - ElevenLabs free tier = 10k chars/month. Plus tier $5/mo = 30k chars. Creator tier $22/mo = 100k chars.
 - Average 30s Short voiceover = ~100 words = ~600 chars → ~16 free Shorts/month.
 - For long-form 10min videos: ~12-18k chars per video → 1-3 videos/month on Plus.
+- **HARD RULE**: generate in batches (one chunk = one chapter or one beat). Full-script in single call degrades quality (per Jacksons AI tutorial). Save per-chapter MP3 → render-engine stitches them.
+- Pass V3 model (`eleven_multilingual_v2` or `eleven_v3` if available) — emotion tags only work on V3+
 
 ## API key
 
