@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "owner_id": "__REPLACE_ME__",
+  "default_channel": null,
+  "channels": [],
+  "_onboarding_required": true,
+  "_template_version": "0.1.0"
+}

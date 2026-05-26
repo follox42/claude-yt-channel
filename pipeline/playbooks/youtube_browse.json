@@ -1,0 +1,69 @@
+{
+  "name": "youtube_browse",
+  "description": "Browse YouTube as a human: search, scroll, open videos, capture metadata. Used by niche-radar and viral-decoder.",
+  "profile": "claude-yt-channel",
+  "base_url": "https://www.youtube.com",
+  "steps": [
+    {
+      "id": "warmup",
+      "action": "navigate",
+      "url": "https://www.youtube.com",
+      "wait_for": "ytd-app",
+      "delay_after_ms": [2000, 4500]
+    },
+    {
+      "id": "accept_cookies",
+      "action": "click_if_present",
+      "selector": "button[aria-label*='Accept'], button[aria-label*='Tout accepter']",
+      "optional": true,
+      "delay_after_ms": [800, 1500]
+    },
+    {
+      "id": "search",
+      "action": "fill",
+      "selector": "input#search",
+      "value": "{{seed}}",
+      "submit_key": "Enter",
+      "wait_for": "ytd-video-renderer, ytd-rich-item-renderer",
+      "delay_after_ms": [2500, 4000]
+    },
+    {
+      "id": "filter_shorts",
+      "action": "click_if_present",
+      "selector": "yt-formatted-string:has-text('Shorts'), [aria-label*='Shorts']",
+      "optional": true,
+      "delay_after_ms": [1500, 2500]
+    },
+    {
+      "id": "scroll_results",
+      "action": "scroll",
+      "direction": "down",
+      "count": 5,
+      "step_px": 800,
+      "delay_between_ms": [1500, 3500]
+    },
+    {
+      "id": "harvest",
+      "action": "extract",
+      "selector_each": "ytd-video-renderer, ytd-rich-item-renderer",
+      "fields": {
+        "title": "#video-title",
+        "channel": "ytd-channel-name a, .ytd-channel-name a",
+        "views": "#metadata-line span:nth-of-type(1)",
+        "uploaded": "#metadata-line span:nth-of-type(2)",
+        "url": "a#thumbnail @href",
+        "duration": "ytd-thumbnail-overlay-time-status-renderer #text"
+      },
+      "limit": 20
+    }
+  ],
+  "outputs": {
+    "harvest": "runs/<run_id>/youtube_harvest.json"
+  },
+  "anti_detect": {
+    "user_agent_pool": "default",
+    "random_mouse_jitter": true,
+    "mouse_path_curves": true,
+    "stay_at_least_ms": 4000
+  }
+}

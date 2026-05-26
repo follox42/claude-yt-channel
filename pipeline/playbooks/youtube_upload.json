@@ -1,0 +1,113 @@
+{
+  "name": "youtube_upload",
+  "description": "Upload a final.mp4 to YouTube Studio as a Short. Channel must be logged in (separate camoufox profile per channel).",
+  "profile": "{{channel_profile}}",
+  "base_url": "https://studio.youtube.com",
+  "steps": [
+    {
+      "id": "open_studio",
+      "action": "navigate",
+      "url": "https://studio.youtube.com",
+      "wait_for": "ytcp-uploads, [aria-label*='Create']",
+      "delay_after_ms": [3000, 5000]
+    },
+    {
+      "id": "click_create",
+      "action": "click",
+      "selector": "ytcp-button#create-icon, [aria-label*='Create']",
+      "delay_after_ms": [1500, 2500]
+    },
+    {
+      "id": "click_upload",
+      "action": "click",
+      "selector": "tp-yt-paper-item:has-text('Upload videos'), [test-id='upload-beta']",
+      "delay_after_ms": [1500, 2500]
+    },
+    {
+      "id": "select_file",
+      "action": "upload",
+      "selector": "input[type='file']",
+      "file_path": "{{final_mp4_path}}",
+      "wait_for": "ytcp-uploads-dialog [aria-label*='title'], textarea[aria-label*='title']",
+      "delay_after_ms": [8000, 14000]
+    },
+    {
+      "id": "fill_title",
+      "action": "fill",
+      "selector": "ytcp-mention-textbox[label='Title'] #textbox, textarea[aria-label*='title']",
+      "value": "{{title}}",
+      "delay_after_ms": [1500, 2500]
+    },
+    {
+      "id": "fill_description",
+      "action": "fill",
+      "selector": "ytcp-mention-textbox[label='Description'] #textbox",
+      "value": "{{description}}",
+      "delay_after_ms": [1500, 2500]
+    },
+    {
+      "id": "set_not_for_kids",
+      "action": "click",
+      "selector": "tp-yt-paper-radio-button[name='VIDEO_MADE_FOR_KIDS_NOT_MFK']",
+      "delay_after_ms": [800, 1500]
+    },
+    {
+      "id": "open_advanced",
+      "action": "click",
+      "selector": "ytcp-button:has-text('Show more'), #toggle-button",
+      "delay_after_ms": [1500, 2500]
+    },
+    {
+      "id": "fill_tags",
+      "action": "fill",
+      "selector": "ytcp-form-input-container[label='Tags'] input, input[aria-label*='tags']",
+      "value": "{{tags_csv}}",
+      "delay_after_ms": [1500, 2500]
+    },
+    {
+      "id": "upload_thumbnail",
+      "action": "upload",
+      "selector": "ytcp-thumbnails-compact-editor-uploader input[type='file']",
+      "file_path": "{{thumbnail_path}}",
+      "delay_after_ms": [4000, 7000]
+    },
+    {
+      "id": "next_step",
+      "action": "click",
+      "selector": "ytcp-button#next-button",
+      "delay_after_ms": [1500, 2500],
+      "repeat_until_visible": "#done-button, #publish-button",
+      "max_clicks": 5
+    },
+    {
+      "id": "choose_visibility",
+      "action": "click",
+      "selector": "tp-yt-paper-radio-button[name='{{visibility}}']",
+      "delay_after_ms": [1500, 2500],
+      "comment": "visibility: PRIVATE | UNLISTED | PUBLIC"
+    },
+    {
+      "id": "publish_or_save_draft",
+      "action": "click",
+      "selector": "{{publish_mode == 'now' ? '#done-button' : '#close-button'}}",
+      "delay_after_ms": [2000, 4000]
+    },
+    {
+      "id": "capture_video_id",
+      "action": "extract_single",
+      "fields": {
+        "video_url": "ytcp-video-share-dialog a @href, .video-url",
+        "video_id_regex": "(?<=v=)[A-Za-z0-9_-]{11}"
+      }
+    }
+  ],
+  "anti_detect": {
+    "stay_at_least_ms": 15000,
+    "random_mouse_jitter": true,
+    "between_steps_jitter_ms": [800, 2200]
+  },
+  "safety": {
+    "abort_if_selector_present": [".strike-warning", ".policy-violation", "[role='alert']:has-text('Copyright')"],
+    "max_uploads_per_day_per_channel": 3
+  }
+}

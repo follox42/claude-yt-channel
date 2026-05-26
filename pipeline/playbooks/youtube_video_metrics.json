@@ -1,0 +1,41 @@
+{
+  "name": "youtube_video_metrics",
+  "description": "Open a public watch URL and capture views/likes/comments/upload date. Used by sentry (public-side capture).",
+  "profile": "claude-yt-channel",
+  "steps": [
+    {
+      "id": "open",
+      "action": "navigate",
+      "url": "{{video_url}}",
+      "wait_for": "#info-container, ytd-watch-metadata",
+      "delay_after_ms": [3000, 5000]
+    },
+    {
+      "id": "click_more",
+      "action": "click_if_present",
+      "selector": "tp-yt-paper-button#expand, #expand",
+      "optional": true,
+      "delay_after_ms": [800, 1500]
+    },
+    {
+      "id": "extract",
+      "action": "extract_single",
+      "fields": {
+        "title": "h1.ytd-watch-metadata yt-formatted-string",
+        "channel": "ytd-channel-name yt-formatted-string a",
+        "subs": "#owner-sub-count, yt-formatted-string#owner-sub-count",
+        "views": "ytd-watch-info-text #info span:nth-of-type(1), #info-container #info span:nth-of-type(1)",
+        "uploaded_at": "ytd-watch-info-text #info span:nth-of-type(3), #info-container #info span:nth-of-type(3)",
+        "likes": "#segmented-like-button button[aria-label*='like'] @aria-label",
+        "comments_count": "ytd-comments-header-renderer h2 yt-formatted-string"
+      }
+    }
+  ],
+  "outputs": {
+    "extract": "runs/<run_id>/metric_<video_id>.json"
+  },
+  "anti_detect": {
+    "stay_at_least_ms": 8000,
+    "scroll_random_during_wait": true
+  }
+}

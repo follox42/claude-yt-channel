@@ -1,0 +1,55 @@
+{
+  "id": "yt-channel",
+  "name": "YouTube Short Viral",
+  "description": "Native dashboard + Remotion render + pipeline orchestration for the claude-yt-channel project. Replaces the standalone Next.js dashboard — visible directly inside OpenClaw at /__openclaw__/yt-channel/.",
+  "version": "0.1.0",
+  "activation": {
+    "onStartup": true
+  },
+  "enabledByDefault": true,
+  "contracts": {
+    "tools": [
+      "yt_channel_list_runs",
+      "yt_channel_get_run",
+      "yt_channel_start_run",
+      "yt_channel_list_niches",
+      "yt_channel_render_short",
+      "yt_channel_pipeline_status"
+    ]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "workspaceDir": {
+        "type": "string",
+        "description": "Absolute path to the claude-yt-channel project root. Defaults to ${PROJECT_ROOT}."
+      },
+      "remotionDir": {
+        "type": "string",
+        "description": "Absolute path to the Remotion sub-project. Defaults to <workspaceDir>/remotion."
+      },
+      "pythonBin": {
+        "type": "string",
+        "description": "Python binary path for invoking the orchestrator. Defaults to python3 on PATH.",
+        "default": "python3"
+      }
+    }
+  },
+  "permissions": {
+    "filesystem": {
+      "read": ["<workspaceDir>/**"],
+      "write": ["<workspaceDir>/runs/**", "<workspaceDir>/data/runs.db"]
+    },
+    "subprocess": [
+      {
+        "binary": "python3",
+        "purpose": "Invoke the orchestrator (pipeline driver)"
+      },
+      {
+        "binary": "npx remotion",
+        "purpose": "Headless Remotion render of the Short composition"
+      }
+    ]
+  }
+}

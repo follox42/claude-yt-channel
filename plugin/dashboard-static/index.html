@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>yt-viral · OpenClaw</title>
+		<link rel="stylesheet" href="static/css/app.css" />
+	</head>
+	<body>
+		<main id="app">
+			<header>
+				<h1>yt-viral</h1>
+				<span class="dim">OpenClaw native plugin · live via WS</span>
+				<div id="ws-status" class="ws-status">connecting…</div>
+			</header>
+
+			<section class="stats" id="stats"></section>
+
+			<section>
+				<div class="row-between">
+					<h2>Recent runs</h2>
+					<button id="new-run-btn" class="btn">+ new run</button>
+				</div>
+				<div id="runs-table"></div>
+			</section>
+
+			<section>
+				<h2>Active niches</h2>
+				<div id="niches-grid"></div>
+			</section>
+
+			<section class="events">
+				<h2>Live events</h2>
+				<div id="events-log"></div>
+			</section>
+		</main>
+
+		<dialog id="new-run-dialog">
+			<form method="dialog" id="new-run-form">
+				<h3>Start a new run</h3>
+				<label>Niche slug
+					<input name="niche" required placeholder="anime-reaction-shorts" />
+				</label>
+				<label>Mode
+					<select name="mode">
+						<option value="mvp" selected>mvp (stops before upload)</option>
+						<option value="full">full (all 9 stages)</option>
+					</select>
+				</label>
+				<div class="row-end">
+					<button value="cancel">cancel</button>
+					<button id="new-run-submit" value="ok" class="btn-accent">start</button>
+				</div>
+			</form>
+		</dialog>
+
+		<script src="static/js/app.js"></script>
+	</body>
+</html>

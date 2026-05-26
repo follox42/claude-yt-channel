@@ -1,0 +1,38 @@
+{
+  "name": "@claude-yt-channel/openclaw-plugin",
+  "version": "0.1.0",
+  "description": "OpenClaw native plugin: serves the claude-yt-channel dashboard at /__openclaw__/yt-channel/ and exposes Remotion render + pipeline tools.",
+  "type": "module",
+  "main": "dist/index.js",
+  "openclaw": {
+    "extensions": ["./dist/index.js"],
+    "runtimeExtensions": ["./dist/index.js"],
+    "install": {
+      "npmSpec": "@claude-yt-channel/openclaw-plugin",
+      "defaultChoice": "local",
+      "minHostVersion": ">=2026.4.25"
+    },
+    "compat": {
+      "pluginApi": ">=2026.4.25"
+    }
+  },
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.4.25"
+  },
+  "peerDependenciesMeta": {
+    "openclaw": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0"
+  },
+  "files": [
+    "dist/**",
+    "dashboard-static/**",
+    "openclaw.plugin.json"
+  ]
+}

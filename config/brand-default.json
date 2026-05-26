@@ -1,0 +1,62 @@
+{
+  "brand": "yt-channel",
+  "colors": {
+    "primary": "#FF4757",
+    "secondary": "#FFD700",
+    "bg": "#0A0A0C",
+    "text": "#FFFFFF",
+    "stroke": "#000000",
+    "accent": "#FFD700"
+  },
+  "fonts": {
+    "title": "Impact",
+    "body": "Inter",
+    "fallback": "system-ui"
+  },
+  "logo": {
+    "position": "none"
+  },
+  "text_overlay": {
+    "default_font_size_pct": 8,
+    "max_chars_per_line": 20,
+    "stroke_width_px": 5,
+    "case": "uppercase",
+    "letter_spacing_em": 0.03,
+    "line_height": 1.05
+  },
+  "motion": {
+    "entrance": "pop-spring",
+    "exit": "fade-out",
+    "transition_default": "hard-cut",
+    "spring_damping": 12,
+    "spring_stiffness": 200
+  },
+  "captions": {
+    "font_size_pct": 6,
+    "position": "bottom-center",
+    "background": "transparent",
+    "highlight_word": true,
+    "highlight_color": "#FFD700"
+  },
+  "audio": {
+    "music_bus_db": -18,
+    "voice_bus_db": -6,
+    "duck_voice_over_music_db": -8,
+    "lufs_target": -10
+  },
+  "delivery": {
+    "youtube_shorts": {
+      "fps": 30,
+      "codec": "h264",
+      "bitrate_kbps": 8000,
+      "audio_codec": "aac",
+      "audio_bitrate_kbps": 192,
+      "width": 1080,
+      "height": 1920
+    }
+  },
+  "safe_areas": {
+    "title_safe_pct": 88,
+    "action_safe_pct": 94
+  }
+}

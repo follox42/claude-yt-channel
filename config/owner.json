@@ -1,0 +1,24 @@
+{
+  "owner_id": "__REPLACE_ME__",
+  "name": "__REPLACE_ME__",
+  "email": "__REPLACE_ME__",
+  "higgsfield": {
+    "account_email": "__REPLACE_ME__",
+    "auth_method": "cli",
+    "credentials_path": "~/.config/higgsfield/auth.json",
+    "plan": "free",
+    "credit_budget_per_run": 8
+  },
+  "anthropic": {
+    "auth_method": "claude-code",
+    "_note": "Uses parent Claude Code auth — no separate API key needed."
+  },
+  "mem0": {
+    "user_id": "__REPLACE_ME__",
+    "mcp_server": "openmemory-__REPLACE_ME__"
+  },
+  "camoufox": {
+    "_note": "Per-channel profiles isolate cookies. See identities/channels/<slug>/camoufox/.",
+    "global_profile_for_higgsfield_browse": "yt-channel-os-owner-__REPLACE_ME__"
+  }
+}

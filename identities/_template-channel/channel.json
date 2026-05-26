@@ -1,0 +1,40 @@
+{
+  "slug": "__REPLACE_ME__",
+  "name": "__REPLACE_ME__",
+  "owner_id": "nolann",
+  "youtube_channel_id": "",
+  "youtube_channel_url": "",
+  "youtube_handle": "",
+  "niche_slug": "__REPLACE_ME__",
+  "status": "draft",
+  "created_at": "__YYYY-MM-DD__",
+  "camoufox_profile": "yt-channel-channel-__REPLACE_ME__",
+  "brand_anchor": "identities/channels/__REPLACE_ME__/brand.json",
+  "mem0_namespace": "yt-channel.__REPLACE_ME__",
+  "upload_limits": {
+    "max_per_day": 3,
+    "max_per_week": 14,
+    "min_hours_between_uploads": 4
+  },
+  "voice": {
+    "language": "__REPLACE_ME__",
+    "tone": "__REPLACE_ME__",
+    "voiceover_mode": "text-overlay-only"
+  },
+  "legal_notes": "__REPLACE_ME__",
+  "_onboarding": {
+    "status": "pending",
+    "step": "intro",
+    "_steps": [
+      "intro",
+      "niche_exploration",
+      "niche_pick",
+      "channel_naming",
+      "branding",
+      "competitor_study",
+      "youtube_account_setup",
+      "camoufox_profile_setup",
+      "validation"
+    ]
+  }
+}
