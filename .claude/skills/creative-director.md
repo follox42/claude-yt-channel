@@ -1,6 +1,6 @@
 ---
 name: creative-director
-description: Analyze the chosen niche + competitor channels and output a unified creative-bible.json for the channel — visual format (cartoon/anime/photoreal/...), color palette, character setup, voice direction, music direction, thumbnail style. Run ONCE per channel during onboarding (step 5 — branding). All downstream skills read this bible.
+description: Analyze the chosen niche's top performers and DERIVE a unique style_signature for the channel — no fixed enum, the format is whatever works for the niche (iPhone screenshot scroll, Subway Surfers overlay, AI news anchor, Reddit dark-mode, kurzgesagt-flat, etc). Outputs creative-bible.json with a reproducible production_recipe.
 type: agent
 isolation: project
 ---
@@ -9,130 +9,199 @@ isolation: project
 
 ## Mission
 
-Produce a **unified creative bible** for a YouTube channel that locks down all visual + audio + character + thumbnail decisions in one file. Every other skill (script-smith, asset-summoner, render-engine, thumb-craft, music-composer, voice-actor) reads this bible at run start and conforms to it.
+Watch the niche's outliers and **describe their visual signature in free-form** — then write a production recipe to reproduce it with our tools. Style is **emergent**, not picked from a dropdown.
 
-**Why one file**: previous version had styling spread across brand.json + channel.json + ad-hoc decisions per video → drift, inconsistency, "AI slop" feel. With a bible, every video looks like it's from the same channel.
+The default formats people think of (cartoon, photoreal, anime) are only 5% of what cartonne on YT in 2026. The 95% is weird hybrid stuff:
+- iPhone Messages app with auto-scroll narration
+- Subway Surfers gameplay loop as background under serious content
+- Reddit dark-mode UI scrolling with voiceover reading the post
+- Split-screen with AI character reacting to news
+- Screenshot tweets + zoom + dramatic music
+- Hand-drawn whiteboard explanations
+- AI news anchor (talking head) over B-roll
+- Pixar-style storytime (3D animated)
+- Stop-motion toy figurines acting out events
+
+Creative-director's job is to **discover which weird hybrid works in THIS niche** and lock it in.
 
 ## Inputs
 
-- `channel_slug` (required) — the channel being onboarded
-- `niche_slug` (required) — the chosen niche
-- `formula_json_path` (optional) — output from `viral-decoder` if 3 outliers already analyzed
-- `user_preferences` (optional) — what the user said during step 5 of onboarding (mood, voice mode, music intent)
+- `channel_slug` (required)
+- `niche_slug` (required)
+- `formula_json_path` (optional) — from `viral-decoder`
+- `user_preferences` (optional) — what user said during step 5 of onboarding
 
 ## Process
 
-### Stage 1 — Format analysis
+### Stage 1 — Deep observation (not classification)
 
-Read `formula.json` (or invoke `viral-decoder` if missing). For each of the 3 reference outliers, identify:
-- Visual style (cartoon, photoreal, anime, mixed, etc.)
-- Color palette dominant
-- Character usage (recurring? narrator only? none?)
-- Voice register (dramatic, casual, formal, sarcastic)
-- Music genre per beat type
-- Thumbnail pattern (face emotion, text size, color)
+Invoke `/watch` on 3-5 outlier videos in the niche. For each, capture:
 
-Cross-reference + identify the WINNING combination in the niche.
+- **What the screen actually shows at second 1, 5, 15, 30**
+- Is there a face? Real or AI?
+- What's in the background? Solid color? Gameplay? Real footage?
+- UI elements? iPhone bezel? Reddit chrome? News ticker?
+- Animation type? Smooth pan? Hard cuts? Scroll? Zoom?
+- Text on screen? Bottom captions or top hook overlay? Both?
+- Audio? Narrator voice? Music genre? SFX hits?
 
-### Stage 2 — Decision matrix
+**Don't classify too early.** Document what you see literally. The label comes after observation, not before.
 
-Score 4 visual format candidates for THIS specific niche:
+### Stage 2 — Pattern extraction
 
-| Format | Higgsfield strength | Production cost | Differentiation potential | Audience fit |
-|---|---|---|---|---|
-| cartoon-flat | ⭐⭐ | low | medium | depends |
-| photorealistic-cinematic | ⭐⭐⭐⭐⭐ | medium | low (saturated) | most niches |
-| anime | ⭐⭐⭐⭐ | medium | high if niche allows | gaming, reactions, lore |
-| retro-vhs | ⭐⭐⭐ | low | high | conspiracy, lost media, history |
-| comic-book | ⭐⭐⭐ | medium | high | history, true crime, lore |
-| mixed-media | ⭐⭐ | high | very high | premium documentary |
+After watching 3-5 outliers, find the COMMON signature:
 
-Pick the format that:
-1. Higgsfield can produce reliably (avoid mixed-media at low budget)
-2. Differs from the 3 reference outliers if they're all using the same style (differentiation = algorithm signal)
-3. Matches audience expectation but with a twist
+- "All 3 use iPhone Messages UI overlaid on a colored background"
+- "Top 2 have a Minecraft parkour loop in the bottom-third"
+- "Every outlier opens on a closeup face with text 'WAIT FOR IT'"
+- "Background is always a moving dolly shot of a generic city"
 
-### Stage 3 — Character decision
+Extract 3-7 **key visual techniques** that recur across outliers. These are the building blocks.
 
-Ask (or infer from user preferences):
-- **No characters** (narrator-only, faceless documentary) → simplest, default for history/educational
-- **Single recurring character** (channel mascot, "host" avatar) → builds brand recognition, requires Higgsfield Soul ID
-- **Small cast** (2-4 recurring) → for storytelling channels (mythology, fictional history)
+### Stage 3 — Style signature
 
-If single-recurring or small-cast → **invoke `character-forge` skill** for each character (trains Soul ID, gets reference_id). Store the IDs in the bible.
+Synthesize into a `style_signature` with:
 
-### Stage 4 — Voice direction
+- **`label`** — short slug describing the style. Free-form. Examples:
+  - `iphone-imessage-narration`
+  - `reddit-dark-mode-scroll`
+  - `subway-surfers-overlay-bottom`
+  - `ai-news-anchor-broll`
+  - `split-reaction-ai-face`
+  - `screenshot-tweet-zoom-narration`
+  - `whiteboard-marker-explainer`
+  - `pixar-3d-storytime`
+  - `comic-book-panels`
+  - `cartoon-flat-rapid-cuts`
 
-If user said "no voice" during onboarding step 5 → set `voice.mode = "text-overlay-only"`.
-Otherwise → pick ElevenLabs voice matching the niche tone:
-- Documentary serious: `Brian` / `Adam` (low-pitched authoritative)
-- Reaction/casual: `Charlie` / `Sam`
-- Dramatic narration: `Antoni` / `Daniel`
-- Mysterious: `Liam` (low whispered)
+  Coin a new label if no existing one fits. Be specific.
 
-Lock `voice_id` in bible.
+- **`description`** — 2-5 sentences of prose describing the look. Specific enough that another agent reading this can reproduce it without re-watching the outliers.
 
-### Stage 5 — Music direction
+- **`key_visual_techniques`** — list of reproducible moves (5-10 items).
 
-Determine genre per scene type (hook/buildup/payoff/outro). Examples for niches:
-- **Bizarre history** → tense-cinematic-build → epic-orchestral-hit
-- **AI tools daily** → upbeat-electronic → tech-beat
-- **Mythology** → atmospheric-dark → epic-orchestral-rise
-- **Reactions** → quirky-loop → comedy-sting
+- **`reference_outliers`** — links to the videos that exemplify this style, with what to borrow per channel.
 
-Set `music.mode`:
-- `stock-library: pixabay` (free, default)
-- `ai-generated-suno` ($10/mo, full control)
-- `none` if user prefers silent overlay
+### Stage 4 — Production recipe
 
-### Stage 6 — Thumbnail style discovery
+This is the critical step. For the style_signature you just defined, write a **reproducible recipe** using OUR tools:
 
-From the 3 reference outliers' thumbnails:
-- Dominant pattern (face-shock, before-after, object-closeup, text-only)
-- Color contrast level (high/medium/low)
-- Text word count + position
-- Face emotion if face present
+```json
+"production_recipe": {
+  "primary_tool": "remotion",   // or "higgsfield-only" or "footage-hunter-only" or "hybrid"
 
-Decide:
-- **Mirror** the dominant pattern (lower differentiation, proven works)
-- **Adjacent** pattern (slightly different but same niche feel)
-- **Differentiate** (risky but algorithm-friendly if niche is saturated)
+  "remotion_components": [
+    "<IPhoneMessagesUI>",       // need to build / install
+    "<SubwaySurfersLayer>",
+    "<RedditPostScroll>"
+  ],
 
-Default = **adjacent** (best risk/reward for new channel).
+  "asset_sources_per_scene_type": {
+    "narrator_face": "higgsfield-soul-id (if character defined)",
+    "scene_b_roll": "higgsfield-generate (style: {label})",
+    "ui_screenshots": "Remotion templates (no gen needed)",
+    "background_loop": "footage-hunter (Pexels gameplay) or archive.org",
+    "emoji_reactions": "Remotion + emoji-mart library",
+    "text_overlays": "Remotion drawText"
+  },
 
-### Stage 7 — Write the bible
+  "complexity_score": 3
+}
+```
 
-Write to `identities/channels/<slug>/creative-bible.json` using the template at `identities/_template-channel/creative-bible.json`. Replace ALL `__REPLACE_ME__` and `_options` arrays should be removed (keep only the chosen value).
+The recipe tells `asset-summoner` HOW to source each scene type. Different style_signatures route assets differently:
 
-Also write a human-readable `creative-bible.md` next to it summarizing the choices + rationale.
+- `cartoon-flat` → 100% Higgsfield, no Remotion UI overlays
+- `iphone-imessage-narration` → 80% Remotion UI templates + 20% Higgsfield for emoji reactions
+- `stock-footage-narration` → 100% footage-hunter + Remotion text overlays, 0% Higgsfield
+- `subway-surfers-overlay` → 30% Higgsfield (main content) + 70% Remotion (gameplay loop layer + overlays)
+
+### Stage 5 — Complexity check
+
+Score the recipe `complexity_score` (1-5):
+- **1** = text overlay on solid bg (Remotion only, 0 Higgsfield)
+- **2** = stock footage + narration (footage-hunter + voice-actor)
+- **3** = Higgsfield gen scenes + Remotion overlays (standard mix)
+- **4** = Custom Remotion components needed (iPhone UI, Reddit UI, news ticker)
+- **5** = Soul ID characters + custom UI + complex compositing
+
+If complexity_score == 4 or 5 → flag in `creative-bible.md` so user knows production time will be higher AND custom Remotion components must be built before first render.
+
+### Stage 6 — Color palette + thumbnail
+
+Standard: extract dominant colors from outlier reference frames. Override with brand colors if user has them.
+
+For thumbnail_style:
+- Watch outlier thumbnails (extract via `yt-dlp --write-thumbnail`)
+- Describe their pattern_label free-form (e.g. `closeup-face-yellow-text`, `phone-screenshot-zoom`, `split-before-after`)
+- Don't force into the old fixed enum.
+
+### Stage 7 — Voice + music
+
+Pick from outliers' audio patterns:
+- `voice.mode` based on user preference (default = text-overlay-only for MVP)
+- If voiceover used, pick voice_id matching narrator tone in outliers
+- Music genre per scene type from outlier audio analysis
+
+### Stage 8 — Write the bible
+
+Write to `identities/channels/<slug>/creative-bible.json` + human-readable `creative-bible.md`.
+
+If style_signature requires Remotion components that don't exist yet, also write `identities/channels/<slug>/remotion-todo.md` with the components to build.
 
 ## Output
 
 - `identities/channels/<slug>/creative-bible.json` — machine-readable
-- `identities/channels/<slug>/creative-bible.md` — human summary (what was chosen + why)
-- `identities/channels/<slug>/soul-characters/` — Soul ID reference_ids if characters defined
+- `identities/channels/<slug>/creative-bible.md` — human summary
+- `identities/channels/<slug>/remotion-todo.md` — if custom components needed
+- (Optional) `identities/channels/<slug>/soul-characters/<name>.json` if character-forge runs
 
 ## When invoked
 
-- **Onboarding step 5 (branding)** — primary use
-- **User says "redo branding"** — re-run for an existing channel (rare, requires invalidation cascade)
-- **Pivot to new sub-niche** — adjust bible, may invalidate already-produced content
+- Onboarding step 5 (branding) — primary
+- "Redo branding" user request — re-run with cascade invalidation
+- "Pivot to new sub-niche" — adjust style_signature
 
 ## Constraints
 
-- 1 invocation per channel per major iteration (not per video)
-- Cost: ~0.30 EUR (Claude analyzes 3 outliers via /watch + reasoning)
-- DO NOT invoke during a regular run — bible is sacred between runs
+- Watch at least 3 outliers (5+ ideal). Less = unreliable pattern.
+- Don't pick a style_signature you can't reproduce with available tools. If a niche is 100% real footage of skydiving and we have no skydive sources → admit it and recommend a different niche or hybrid approach.
+- Cost: ~0.50 EUR (Claude + /watch on 3-5 outliers).
+- If 2+ runs produce different style_signatures for the SAME niche → user must choose, don't pick arbitrarily.
 
-## Files read by this skill
+## Files read
 
-- `identities/channels/<slug>/channel.json` — basic channel info
-- `identities/channels/<slug>/formula.json` — output from viral-decoder
-- `config/owner.json` — Higgsfield budget constraints
-- `identities/_template-channel/creative-bible.json` — template
+- `identities/channels/<slug>/channel.json`
+- `identities/channels/<slug>/formula.json` (from viral-decoder)
+- `config/owner.json`
 
-## Files this skill writes
+## Files written
 
 - `identities/channels/<slug>/creative-bible.json`
 - `identities/channels/<slug>/creative-bible.md`
-- (Optional) `identities/channels/<slug>/soul-characters/<name>.json` with reference_id from character-forge
+- `identities/channels/<slug>/remotion-todo.md` (conditional)
+
+## Skills delegated to
+
+- `/watch` — analyze each outlier in detail
+- `viral-decoder` — if formula.json not present
+
+## Examples of valid style_signatures (just labels — descriptions are written at runtime)
+
+| Niche | Likely style_signature | complexity |
+|---|---|---|
+| Reddit stories | `reddit-dark-mode-scroll` | 3 |
+| Bizarre history | `cartoon-flat-rapid-cuts` OR `comic-book-panels` OR `retro-vhs-found-footage` | 2-3 |
+| AI tools | `screenshot-tweet-narration` OR `ai-news-anchor-broll` | 2-4 |
+| Police bodycam | `bodycam-real-footage-redacted` (real footage only) | 2 |
+| Drama explainers | `subway-surfers-overlay` OR `minecraft-parkour-overlay` | 3 |
+| Sports moments | `slow-motion-cinematic-replay` | 2 |
+| Tech reviews | `closeup-product-with-text-callouts` | 2 |
+| Cooking shorts | `top-down-hand-cooking-fast-cuts` | 2 |
+| Mythology | `pixar-3d-storytime` OR `comic-book-panels` | 4 |
+| Stoic philosophy | `slow-cinematic-narrator-quote` | 2 |
+| Conspiracy | `retro-vhs-found-footage` OR `news-broadcast-mockup` | 3 |
+| Anime reactions | `split-screen-reaction-clips-fair-use` | 3 |
+| Speedruns | `gameplay-recording-with-celebration-overlay` | 2 |
+
+→ But these are just hints. **Always derive the actual label from outliers**, don't pick from this list blindly.
