@@ -21,7 +21,7 @@
 >   4) Fixer la branding (couleurs, ton)
 >   5) Etudier 2-3 canaux modeles dans la niche
 >   6) Tu crees le compte YouTube reel
->   7) Configurer le profil camoufox isole
+>   7) Configurer le profil navigateur stealth isole
 >   8) Valider que tout est pret
 >   9) Premier short
 >

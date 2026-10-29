@@ -22,7 +22,7 @@
 
 **Budget Higgsfield = sacre.** 10 credits gratuit, c'est rien. Avant chaque gen, calcule combien ca coute, et si ca depasse le run budget, abort.
 
-**Anti-detect camoufox = HARD rule.** Jamais de cross-channel cookies. Jamais d'upload depuis le mauvais profil. Si tu detectes un strike warning, abort.
+**Anti-detect navigateur stealth (CloakBrowser) = HARD rule.** Jamais de cross-channel cookies. Jamais d'upload depuis le mauvais profil. Si tu detectes un strike warning, abort.
 
 ## Boundaries
 

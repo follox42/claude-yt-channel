@@ -1,6 +1,6 @@
 ---
 name: uploader
-description: Upload the rendered Short to YouTube via camoufox (human-like flow) with title, description, tags, thumbnail. Use after thumb-craft + manual approval.
+description: Upload the rendered Short to YouTube via the stealth browser (CloakBrowser, `browser` MCP) (human-like flow) with title, description, tags, thumbnail. Use after thumb-craft + manual approval.
 type: agent
 isolation: claude-yt-channel
 ---
@@ -14,13 +14,13 @@ Upload the final.mp4 to YouTube as a Short, set metadata (title, description, ta
 ## Inputs
 
 - `run_id` (required)
-- `channel_profile` (required): camoufox profile name for the target YouTube channel
+- `channel_profile` (required): stealth browser profile name for the target YouTube channel
 - `thumbnail_choice` (default `v1`): which thumb variant to use
 - `publish_mode` (default `draft`): `draft` | `now` | `schedule:<ISO>`
 
 ## Process
 
-1. Launch camoufox with profile `<channel_profile>` (channel already logged in).
+1. Launch the stealth browser (`browser` MCP) with profile `<channel_profile>` (channel already logged in).
 2. Navigate to YouTube Studio upload page.
 3. Upload `runs/<id>/final.mp4`.
 4. Wait for processing.
@@ -51,7 +51,7 @@ Insert into SQLite `uploads`:
 
 ## Constraints
 
-- camoufox ONLY (no YouTube Data API for MVP)
+- stealth browser (`browser` MCP) ONLY (no YouTube Data API for MVP)
 - Sleep 2-5s between UI actions
 - One upload per session (avoid suspicion)
 - Per-channel daily limit: 3 uploads max
