@@ -1,6 +1,6 @@
 ---
 name: meta-flow-gen
-description: ZERO-COST unlimited image and video generation via Meta AI (meta.ai) and Google Flow (Nano Banana model). Drives via camoufox browser automation. Used as Tier 0 fallback before consuming Higgsfield credits.
+description: ZERO-COST unlimited image and video generation via Meta AI (meta.ai) and Google Flow (Nano Banana model). Drives via stealth browser automation (CloakBrowser, `browser` MCP). Used as Tier 0 fallback before consuming Higgsfield credits.
 type: agent
 isolation: project
 ---
@@ -17,7 +17,7 @@ This is the **Tier 0 image/video gen** in the asset-summoner sourcing ladder. Hi
 
 ## Why it works
 
-Both services require browser login (Google SSO) but no paid plan. Once cookies are saved in a camoufox profile, generation is unlimited. Discovered via Jacksons AI tutorial (2026-05-15).
+Both services require browser login (Google SSO) but no paid plan. Once cookies are saved in a stealth browser profile, generation is unlimited. Discovered via Jacksons AI tutorial (2026-05-15).
 
 ## Inputs
 
@@ -33,14 +33,14 @@ Both services require browser login (Google SSO) but no paid plan. Once cookies 
 ### Setup (one-time)
 
 ```bash
-# Open camoufox to Meta AI, login with Google
-camoufox-stealth-navigate "https://www.meta.ai" --cookie_profile meta-ai-default
+# Open the stealth browser to Meta AI, login with Google
+browser-stealth-navigate "https://www.meta.ai" --cookie_profile meta-ai-default
 
 # Then Google Flow
-camoufox-stealth-navigate "https://labs.google/fx/tools/flow" --cookie_profile google-flow-default
+browser-stealth-navigate "https://labs.google/fx/tools/flow" --cookie_profile google-flow-default
 ```
 
-User logs in once via the camoufox session, cookies saved. Subsequent runs auto-login.
+User logs in once via the stealth browser session, cookies saved. Subsequent runs auto-login.
 
 ### Image generation (Meta AI)
 
@@ -88,7 +88,7 @@ Saves to `runs/<run_id>/assets/scene_<n>/`:
 
 ## Constraints
 
-- **First call requires manual login via camoufox** (cookies then persist 30+ days)
+- **First call requires manual login via the stealth browser** (cookies then persist 30+ days)
 - Generation latency: 30-90s per image, 60-180s per video
 - Aspect ratio control: Meta AI is less precise — include "vertical 9:16" in prompt
 - Sometimes rate-limited (~10 gens / 5 min) — pause + retry
@@ -123,11 +123,11 @@ Saves to `runs/<run_id>/assets/scene_<n>/`:
 
 ## Files
 
-- Reads: `runs/<id>/script.json`, `creative-bible.json`, camoufox cookie profiles
+- Reads: `runs/<id>/script.json`, `creative-bible.json`, stealth browser cookie profiles
 - Writes: `runs/<id>/assets/scene_<n>/`, `runs/<id>/assets/manifest.json`
 
 ## Tools used
 
-- camoufox stealth_navigate + stealth_click + stealth_type
-- camoufox cookie profile persistence
+- `browser` MCP: browser-stealth_navigate + browser-stealth_click + browser-stealth_type
+- stealth browser cookie profile persistence
 - ffmpeg for any conversion needed (aspect, codec)

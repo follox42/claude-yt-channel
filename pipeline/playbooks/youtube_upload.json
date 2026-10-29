@@ -1,6 +1,6 @@
 {
   "name": "youtube_upload",
-  "description": "Upload a final.mp4 to YouTube Studio as a Short. Channel must be logged in (separate camoufox profile per channel).",
+  "description": "Upload a final.mp4 to YouTube Studio as a Short. Channel must be logged in (separate stealth browser profile per channel).",
   "profile": "{{channel_profile}}",
   "base_url": "https://studio.youtube.com",
   "steps": [

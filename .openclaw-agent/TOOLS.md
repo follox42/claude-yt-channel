@@ -18,10 +18,10 @@
 - Namespace de cet agent : prefixer toutes les writes avec `yt-channel.<channel_slug>.`
 
 ### YouTube
-- Aucun OAuth Data API v3 pour le MVP — tout passe par camoufox UI
-- Chaque canal a son profil camoufox dedie (voir ci-dessous)
+- Aucun OAuth Data API v3 pour le MVP — tout passe par le navigateur stealth (CloakBrowser, MCP `browser`)
+- Chaque canal a son profil navigateur stealth dedie (voir ci-dessous)
 
-## Camoufox profiles (regle HARD : jamais de cross-channel)
+## Profils navigateur stealth (regle HARD : jamais de cross-channel)
 
 | Profile | Logged into | Usage |
 |---|---|---|
@@ -30,12 +30,12 @@
 | `yt-channel-research` | rien (logged-out) | niche-radar + viral-decoder anonymes |
 
 **Setup d'un nouveau profile (manual, ~5 min) :**
-1. `mcp__camoufox-stealth_profiles list` — verifier qu'il n'existe pas
-2. Ouvrir camoufox avec le profile (via MCP ou CLI)
+1. `mcp__browser-stealth_profiles list` — verifier qu'il n'existe pas
+2. Ouvrir le navigateur stealth avec le profile (via le MCP `browser`)
 3. Naviguer vers YouTube Studio (ou Higgsfield)
 4. Login manuel
 5. Fermer proprement
-6. Les cookies persistent dans `~/.camoufox/profiles/<profile>/`
+6. Les cookies persistent dans le profil `<profile>` du MCP `browser`
 
 ## Workspace paths cles
 
@@ -56,7 +56,7 @@
 | `asset-summoner` | Stage 5 — appelle `higgsfield-generate` pour chaque scene |
 | `render-engine` | Stage 6 — delegue au skill global `video-editor` |
 | `thumb-craft` | Stage 7 — 3 variantes thumbnail |
-| `uploader` | Stage 8 (full mode only) — camoufox upload |
+| `uploader` | Stage 8 (full mode only) — upload via navigateur stealth |
 | `sentry` | Stage 9 — track metrics post-pub |
 | **higgsfield-generate** | Direct invoque par asset-summoner |
 | **higgsfield-soul-id** | Si character consistency multi-scenes |
@@ -74,7 +74,7 @@
 
 ## MCP servers utiles (mcphub.nocode18.com)
 
-- `camoufox` — stealth browser
+- `browser` — stealth browser (CloakBrowser)
 - `higgsfield` — image/video gen (alternative au CLI)
 - `obsidian` — vault __OWNER_NAME__ (knowledge / niches / formulas)
 - `openmemory-__OWNER_ID__` — mem0 namespace

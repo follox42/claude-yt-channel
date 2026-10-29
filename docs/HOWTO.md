@@ -45,14 +45,14 @@ cd dashboard && npm run dev
 
 Leave it running in one terminal. It tails the SQLite db live.
 
-## 3. Camoufox profile setup (manual, once)
+## 3. Stealth browser profile setup (manual, once)
 
-In a separate terminal with camoufox MCP available:
-1. Launch a camoufox session with profile name `claude-yt-channel`.
+In a separate terminal with the `browser` MCP available:
+1. Launch a stealth browser (CloakBrowser) session with profile name `claude-yt-channel`.
 2. Open `https://youtube.com` — accept cookies.
 3. Open `https://higgsfield.ai` — login via Google with your gmail.
 4. Open `https://studio.youtube.com` for each channel you'll upload to (use profile names `channel-<slug>` per channel).
-5. Close camoufox cleanly — cookies persist.
+5. Close the stealth browser session cleanly — cookies persist.
 
 Sanity check: re-open same profile, navigate to higgsfield, you should still be logged in.
 
@@ -134,7 +134,7 @@ Soft cap per run: 2 EUR. Hard kill if exceeded (TODO: add budget guard in orches
 | Dashboard "DB error" | Run `python3 pipeline/orchestrator.py --init-db` |
 | Higgsfield login expired | Re-do step 3 above |
 | Remotion render very slow | `Config.setConcurrency(8)` in `remotion.config.ts` |
-| YouTube upload stuck on "processing" | Camoufox needs longer `stay_at_least_ms` — bump to 30s |
+| YouTube upload stuck on "processing" | The stealth browser needs longer `stay_at_least_ms` — bump to 30s |
 
 ## 10. Where to read more
 
