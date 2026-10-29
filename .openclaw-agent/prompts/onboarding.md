@@ -2,7 +2,7 @@
 
 > Active automatiquement quand `identities/_channels.json::_onboarding_required` est `true` ET `channels[]` est vide. Une fois termine, met `_onboarding_required` a `false` et passe en mode operationnel.
 
-L'objectif : demarrer une conversation guidee qui aboutit a un canal YouTube reellement cree, avec brand + niche + camoufox profile + channel.json complet, pret pour son premier Short.
+L'objectif : demarrer une conversation guidee qui aboutit a un canal YouTube reellement cree, avec brand + niche + profil navigateur stealth + channel.json complet, pret pour son premier Short.
 
 ## Etat de l'onboarding
 
@@ -27,7 +27,7 @@ Dis (en francais, court) :
 >   4) On fixe la branding (couleurs, ton)
 >   5) On etudie 2-3 canaux modeles dans la niche
 >   6) Tu crees le compte YouTube reel
->   7) On configure le profil camoufox isole
+>   7) On configure le profil navigateur stealth isole
 >   8) On valide que tout est pret
 >
 > Ca te va ? Tu prefferes que je propose des niches au feeling (rapide) ou apres une vraie recherche de tendances 2026 (5-10 min) ?
@@ -164,18 +164,18 @@ Quand l'user colle l'URL :
 
 > Maintenant on isole les cookies de ce canal du reste de ta vie. Etapes :
 >
-> 1. Ouvre camoufox avec le profil `yt-channel-channel-<slug>` (commande exacte) :
->    `camoufox --profile yt-channel-channel-<slug>` (ou via le MCP camoufox-stealth_profiles)
-> 2. Dans cette fenetre camoufox, va sur https://studio.youtube.com
+> 1. Ouvre le navigateur stealth (CloakBrowser) avec le profil `yt-channel-channel-<slug>` :
+>    via le MCP `browser` (`browser-stealth_profiles`)
+> 2. Dans cette session du navigateur stealth, va sur https://studio.youtube.com
 > 3. Login avec le compte Google qui possede le canal qu'on vient de creer
 > 4. Verifie que c'est le bon canal en haut a droite
-> 5. Ferme camoufox proprement (Cmd+Q / Ctrl+Q, pas force-quit)
+> 5. Ferme le navigateur stealth proprement (Cmd+Q / Ctrl+Q, pas force-quit)
 >
-> Les cookies persistent dans `~/.camoufox/profiles/yt-channel-channel-<slug>/`. Plus jamais besoin de relogin.
+> Les cookies persistent dans le profil `yt-channel-channel-<slug>` du MCP `browser`. Plus jamais besoin de relogin.
 >
 > Confirme-moi quand c'est fait.
 
-Si l'user a besoin, tu peux faire le test camoufox toi-meme (navigate, screenshot) pour verifier le login persiste.
+Si l'user a besoin, tu peux faire le test du navigateur stealth toi-meme (navigate, screenshot) pour verifier le login persiste.
 
 Update `_onboarding.step = "validation"`.
 
@@ -187,7 +187,7 @@ Verifie automatiquement :
 - [ ] `youtube_channel_id` rempli + commence par UC
 - [ ] `brand.json` reflete les choix de l'user (etape 5)
 - [ ] `formula.json` existe (etape 6)
-- [ ] Profile camoufox `yt-channel-channel-<slug>` cree (test : `camoufox-stealth_profiles list`)
+- [ ] Profil navigateur stealth `yt-channel-channel-<slug>` cree (test : `browser-stealth_profiles list`)
 - [ ] `_channels.json::channels[]` contient `<slug>`
 - [ ] `_channels.json::default_channel` = `<slug>` (si c'est le 1er canal)
 - [ ] `_channels.json::_onboarding_required` = `false`
@@ -202,7 +202,7 @@ Affiche le resume :
 > - YouTube ID : <UC...>
 > - Brand : <summary 1 ligne>
 > - Modeles etudies : <3 channels>
-> - Camoufox profile : yt-channel-channel-<slug>
+> - Profil navigateur stealth : yt-channel-channel-<slug>
 >
 > Tu peux maintenant lancer ton premier short :
 >   `lance un short pour le canal <slug>`
@@ -224,5 +224,5 @@ Update `_onboarding.status = "completed"`.
 - Sauter des etapes ("je te cree le channel.json en aveugle") → toujours demander confirmation pour les choix de marque
 - Proposer 1 seule niche → toujours 3-5 minimum
 - Inventer des noms de canaux sans verifier dispo handle YT
-- Oublier le profil camoufox → cross-contamination de cookies = ban
+- Oublier le profil navigateur stealth → cross-contamination de cookies = ban
 - Lancer un short en mode `_onboarding.status != "completed"` → refuser et finir l'onboarding d'abord

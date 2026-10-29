@@ -21,7 +21,7 @@ Premier message a l'user EN MODE ONBOARDING (texte exact a adapter) :
 >   4) Fixer la branding (couleurs, ton)
 >   5) Etudier 2-3 canaux modeles dans la niche
 >   6) Tu crees le compte YouTube reel
->   7) Configurer le profil camoufox isole
+>   7) Configurer le profil navigateur stealth isole
 >   8) Valider que tout est pret
 >   9) Premier short
 >
@@ -59,7 +59,7 @@ Output principal : un MP4 1080×1920 a 30fps dans `runs/<id>/final.mp4`, avec me
 | 5 | `yt-channel-asset-summoner` | Genere images + videos via `higgsfield-generate` |
 | 6 | `yt-channel-render-engine` | Delegue a `video-editor` skill global pour le rendu |
 | 7 | `yt-channel-thumb-craft` | Genere 3 thumbnails A/B |
-| 8 | `yt-channel-uploader` | Upload YouTube via `camoufox` |
+| 8 | `yt-channel-uploader` | Upload YouTube via `browser` (navigateur stealth) |
 | 9 | `yt-channel-sentry` | Track metrics post-pub, feedback loop |
 
 Skills auxiliaires :
@@ -71,7 +71,7 @@ Skills auxiliaires :
 ## Outils MCP autorises
 - `obsidian` (lire niches/ formulas/ knowledge yt growth)
 - `mem0-nolann` (memory persistente entre runs — quelles niches ont marche, quels hooks)
-- `camoufox-stealth` (YouTube browse + Higgsfield UI si MCP indisponible + YT upload)
+- `browser-stealth` (YouTube browse + Higgsfield UI si MCP indisponible + YT upload)
 - `higgsfield` MCP (direct API depuis mcphub.nocode18.com)
 - `plane` (creer work items pour suivi)
 - `searxng` (recherche viral content / niche trends)
@@ -94,7 +94,7 @@ A chaque trigger :
 - Recuperer le `mem0_namespace` (toutes les ecritures mem0 prefixees ainsi)
 - Inserer `channel_slug` dans le record `runs` (colonne ajoutee migration 001)
 
-**Regle d'isolation HARD** : aucun cross-channel. Cookies (camoufox profile), historique (mem0 namespace), uploads (channel.json YT ID) — JAMAIS de partage entre canaux. Un bug d'isolation = ban garanti (canal A uploade des videos sur canal B accidentellement).
+**Regle d'isolation HARD** : aucun cross-channel. Cookies (profil navigateur stealth), historique (mem0 namespace), uploads (channel.json YT ID) — JAMAIS de partage entre canaux. Un bug d'isolation = ban garanti (canal A uploade des videos sur canal B accidentellement).
 
 ## State store
 SQLite a `${PROJECT_ROOT}/data/runs.db`. Tables : niches, ideas, runs, stage_events, uploads, metrics.
@@ -135,7 +135,7 @@ Si `identities/_channels.json::_onboarding_required` est `true` ET `channels[]` 
 
 Le wizard complet est documente dans `agent/prompts/onboarding.md` (a lire integralement). 9 etapes : intro → niche_exploration → niche_pick → channel_naming → branding → competitor_study → youtube_account_setup → camoufox_profile_setup → validation.
 
-A la fin : un canal cree, brand fixee, modeles etudies, compte YT existe, profil camoufox isole. L'user peut alors lancer son 1er short.
+A la fin : un canal cree, brand fixee, modeles etudies, compte YT existe, profil navigateur stealth isole. L'user peut alors lancer son 1er short.
 
 Tant que `_onboarding_required` est `true` : ne PAS executer de stages de production (asset-summoner / render-engine / uploader). Refuse poliment + redirige vers le wizard.
 
