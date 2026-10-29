@@ -77,7 +77,7 @@ Unlocked: `subway-surfers-overlay`, `pixar-3d-storytime`, `ai-news-anchor-broll`
 
 ## Level 3 — Multi-channel automation (~150 EUR/month, scaled production)
 
-Add Epidemic Sound (commercial music licensing) + multiple Higgsfield slots + camoufox profiles per channel.
+Add Epidemic Sound (commercial music licensing) + multiple Higgsfield slots + stealth browser profiles per channel.
 
 | Component | Add | Cost |
 |---|---|---|
@@ -107,11 +107,11 @@ The template covers ~85% of a viral pipeline. These items are designed but need 
 → These get built **on demand** when `creative-director` produces a `complexity_score` ≥ 4 OR when a niche's outliers use a style we don't have a component for. Build via `gsd:plan-phase` or directly when needed.
 
 ### Phase 2 — YouTube Data API upload
-The current `uploader` skill uses camoufox UI automation. Cleaner long-term:
+The current `uploader` skill uses stealth browser UI automation (CloakBrowser via the `browser` MCP). Cleaner long-term:
 - Setup YT Data API v3 + OAuth flow (`bin/yt-oauth.sh` to add)
 - Get refresh token + scopes (youtube.upload + youtube.readonly)
 - Add to .env: `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`
-- Update uploader to detect API mode vs camoufox mode
+- Update uploader to detect API mode vs browser mode
 
 ### Phase 3 — Multi-channel orchestration
 - The orchestrator currently handles 1 channel per run. For parallel multi-channel:
@@ -154,7 +154,7 @@ Assuming you've just cloned:
 ### After all setup
 9. `openclaw plugins install --link --dangerously-force-unsafe-install ./plugin`
 10. `openclaw run yt-channel-orchestrator` → wizard launches automatically
-11. Wizard does: niche-radar → niche-pick → naming → creative-director → character-forge (optional) → competitor-study → YT account create → camoufox profile → validation
+11. Wizard does: niche-radar → niche-pick → naming → creative-director → character-forge (optional) → competitor-study → YT account create → stealth browser profile → validation
 12. Then: `lance un short pour mon canal`
 13. Pipeline runs: niche-radar → viral-decoder → idea-forge → script-smith → asset-summoner + voice-actor + music-composer (parallel) → render-engine → thumb-craft → STOP (mvp mode)
 14. Review `runs/<id>/final.mp4` + 3 thumbnails

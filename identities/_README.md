@@ -18,7 +18,7 @@ If multiple humans share this codebase (rare), copy `config/owner.json` per pers
 
 One channel = one YouTube channel = one isolated identity bubble. Each channel has:
 
-- Own camoufox profile (cookies, login state for YT + Higgsfield)
+- Own stealth browser profile (cookies, login state for YT + Higgsfield)
 - Own brand.json (colors, fonts, voice tone)
 - Own niche specialization
 - Own mem0 sub-namespace
@@ -34,12 +34,12 @@ identities/
     └── <slug>/             one folder per channel
         ├── channel.json    metadata (YT channel ID, niche, status, branding ref)
         ├── brand.json      override of project-default brand-default.json
-        ├── camoufox/       camoufox profile snapshot (cookies, session)
-        │   └── .gitkeep    placeholder; real cookies live in camoufox storage
+        ├── camoufox/       stealth browser profile snapshot (cookies, session)
+        │   └── .gitkeep    placeholder; real cookies live in the `browser` MCP storage
         └── uploads/        log of uploads (one .json per video)
 ```
 
-## Camoufox profile naming convention
+## Stealth browser profile naming convention
 
 | Profile name | Purpose | Logged into |
 |---|---|---|
@@ -78,8 +78,8 @@ cp config/brand-default.json identities/channels/$CHANNEL/brand.json
 # 4. Register in _channels.json (or let the agent auto-discover)
 python3 -c "import json; d=json.load(open('identities/_channels.json')); d['channels'].append('$CHANNEL'); json.dump(d, open('identities/_channels.json','w'), indent=2)"
 
-# 5. Setup camoufox profile (manual, 5 min):
-#    Open camoufox with profile yt-channel-channel-$CHANNEL
+# 5. Setup stealth browser profile (manual, 5 min):
+#    Open the stealth browser (`browser` MCP) with profile yt-channel-channel-$CHANNEL
 #    Login to YouTube as that channel
 #    Close cleanly — cookies persist
 ```
@@ -91,7 +91,7 @@ The `yt-channel-orchestrator` agent has ONE `sessions/` directory under `.opencl
 When a run targets a specific channel, the orchestrator:
 1. Reads `--channel <slug>` from the request (or defaults to the only active channel)
 2. Loads `identities/channels/<slug>/channel.json` + `brand.json`
-3. Passes the channel context to ALL downstream skills (asset-summoner uses the brand, uploader uses the camoufox profile, sentry namespaces metrics)
+3. Passes the channel context to ALL downstream skills (asset-summoner uses the brand, uploader uses the stealth browser profile, sentry namespaces metrics)
 4. Logs the channel slug in every `stage_events.payload`
 
 Sessions stay shared (one orchestrator brain) but artifacts are scoped per channel:
@@ -121,7 +121,7 @@ openclaw send yt-channel-orchestrator "stats du canal anime-reactions"
 | Higgsfield account | ✅ | ❌ (one Higgsfield for all channels) |
 | Higgsfield credits budget | ✅ | tracked per channel via cost_eur |
 | Claude API auth | ✅ | ❌ |
-| Camoufox profile | ❌ | ✅ per channel (cookies, YT login) |
+| Stealth browser profile | ❌ | ✅ per channel (cookies, YT login) |
 | Brand style | template default | overridable per channel |
 | mem0 memory | nolann user_id | namespaced sub-keys (yt-channel.\<slug\>) |
 | Niche knowledge | sometimes cross-channel | mostly per channel |
