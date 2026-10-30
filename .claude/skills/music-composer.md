@@ -22,7 +22,7 @@ Provide one or more music tracks for a video that match the channel's `creative-
 ### Tier 0 — ZERO-KEY (always available)
 
 - **YouTube Audio Library** — built-in YT Studio free music library. Filter: Genre × Mood. ~5000+ tracks, no attribution. Most channels Jacksons AI features use this.
-- **Pixabay Music** (camoufox scrape, no API) — fallback if YT library doesn't have the right vibe.
+- **Pixabay Music** (stealth browser scrape, no API) — fallback if YT library doesn't have the right vibe.
 
 ### Tier 1 — Optional upgrades
 
@@ -51,8 +51,8 @@ Provide one or more music tracks for a video that match the channel's `creative-
 3. If `mode == "stock-library"`:
    a. Read script.json → group scenes by type (hook/buildup/payoff/outro).
    b. For each scene type, query in tier order:
-      - **YT Audio Library** (Tier 0, no key) — navigate via camoufox to `studio.youtube.com/audio` with cookie_profile=channel-specific, filter by genre + mood, download MP3 directly. ⭐ DEFAULT
-      - **Pixabay scrape** (Tier 0, no API) — camoufox to `pixabay.com/music/?q=<genre>` if YT Library has no match.
+      - **YT Audio Library** (Tier 0, no key) — navigate via the channel's browser space (`browser-yt-<slug>-browser_open`) to `studio.youtube.com/audio`, filter by genre + mood, download the MP3 into the space (`browser_files(action="list")` then `browser_files(action="link", path=...)` to fetch it). ⭐ DEFAULT
+      - **Pixabay scrape** (Tier 0, no API) — stealth browser to `pixabay.com/music/?q=<genre>` if YT Library has no match.
       - **Pixabay API** (Tier 1, free key) — `https://pixabay.com/api/videos/music/?q=<genre>` if key in .env
       - **Suno API** (Tier 1, paid) — generates exact-duration custom track if voice-sync precision needed
    c. Download top candidate per scene type → `runs/<id>/music/<type>.mp3`.

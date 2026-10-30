@@ -1,6 +1,6 @@
 ---
 name: footage-hunter
-description: Source visual/audio assets from KEY-FREE public sources first (archive.org, Wikimedia, NASA, DuckDuckGo image scrape via camoufox). Optionally upgrade with Pexels/Pixabay/Unsplash keys if user provides them. Use as fallback when Higgsfield credits are low OR when real footage is required.
+description: Source visual/audio assets from KEY-FREE public sources first (archive.org, Wikimedia, NASA, DuckDuckGo image scrape via the stealth browser). Optionally upgrade with Pexels/Pixabay/Unsplash keys if user provides them. Use as fallback when Higgsfield credits are low OR when real footage is required.
 type: agent
 isolation: project
 ---
@@ -34,9 +34,9 @@ Design principle: the pipeline must work **end-to-end with zero key-management o
 | **Library of Congress** | image, audio | `loc.gov/apis` JSON (no key) | Public domain |
 | **Europeana** | image, video | `api.europeana.eu` (free key, 5k req/day — optional) | Mostly CC |
 | **YouTube Creative Commons** | video | `yt-dlp 'ytsearch:{query} licence=Creative Commons'` | CC-BY |
-| **DuckDuckGo Images** | image | camoufox scrape `duckduckgo.com/?iax=images&iar=images&q=...` + filter free-to-use | varies (verify) |
-| **Pixabay (no-API scrape)** | image, video, audio | camoufox scrape (slower, fragile) | Pixabay License |
-| **Pexels (no-API scrape)** | image, video | camoufox scrape | Pexels License |
+| **DuckDuckGo Images** | image | stealth browser scrape `duckduckgo.com/?iax=images&iar=images&q=...` + filter free-to-use | varies (verify) |
+| **Pixabay (no-API scrape)** | image, video, audio | stealth browser scrape (slower, fragile) | Pixabay License |
+| **Pexels (no-API scrape)** | image, video | stealth browser scrape | Pexels License |
 
 → These cover ~80% of typical Short B-roll needs WITHOUT any API key.
 
@@ -61,8 +61,8 @@ If user has these keys in `config/.env`, footage-hunter prefers them for speed. 
    c. NASA API search → download
    d. Library of Congress → if historical theme
    e. YouTube CC search via yt-dlp → if no other source matches
-   f. DuckDuckGo image scrape via camoufox → fallback for images
-   g. Pixabay/Pexels scrape via camoufox → last resort for stock photos
+   f. DuckDuckGo image scrape via the stealth browser → fallback for images
+   g. Pixabay/Pexels scrape via the stealth browser → last resort for stock photos
    
    Stop as soon as a quality candidate is found.
 
@@ -144,7 +144,7 @@ Always record source + license in the manifest. Reject if license is unclear.
 - `yt-dlp` — archive.org video + YouTube CC search
 - `ffmpeg` — conversion, trimming, aspect fixing
 - `jq` — JSON parsing
-- `camoufox` — scraping fallback if APIs fail
+- `browser-<space>` MCP servers (web-stealth v3 stealth browser, CloakBrowser) — scraping fallback if APIs fail
 
 ## What makes this design robust
 

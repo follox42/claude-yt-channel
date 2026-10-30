@@ -1,7 +1,7 @@
 {
   "name": "youtube_video_metrics",
   "description": "Open a public watch URL and capture views/likes/comments/upload date. Used by sentry (public-side capture).",
-  "profile": "claude-yt-channel",
+  "browser_space": "yt-research",
   "steps": [
     {
       "id": "open",

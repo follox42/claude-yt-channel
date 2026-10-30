@@ -18,7 +18,7 @@ If multiple humans share this codebase (rare), copy `config/owner.json` per pers
 
 One channel = one YouTube channel = one isolated identity bubble. Each channel has:
 
-- Own camoufox profile (cookies, login state for YT + Higgsfield)
+- Own stealth browser space (web-stealth MCP v3: mcphub server `browser-yt-<slug>`, its own cookies and login state for YT Studio)
 - Own brand.json (colors, fonts, voice tone)
 - Own niche specialization
 - Own mem0 sub-namespace
@@ -34,27 +34,29 @@ identities/
     └── <slug>/             one folder per channel
         ├── channel.json    metadata (YT channel ID, niche, status, branding ref)
         ├── brand.json      override of project-default brand-default.json
-        ├── camoufox/       camoufox profile snapshot (cookies, session)
-        │   └── .gitkeep    placeholder; real cookies live in camoufox storage
+        ├── browser/        placeholder for the channel's browser space (no cookies here)
+        │   └── .gitkeep    real cookies live on the web-stealth server, in the space `yt-<slug>`
         └── uploads/        log of uploads (one .json per video)
 ```
 
-## Camoufox profile naming convention
+## Browser space naming convention
 
-| Profile name | Purpose | Logged into |
+The stealth browser (web-stealth MCP v3) isolates cookies per *space*; each space is one mcphub server (`browser-<space>`) with its own bearer token. Tools are `browser-<space>-browser_open`, `-browser_act`, `-browser_upload`, `-browser_handoff`… — no `profile` argument.
+
+| Space (mcphub server) | Purpose | Logged into |
 |---|---|---|
-| `yt-channel-owner-<owner_id>` | Higgsfield UI browsing (fallback if MCP/CLI fails) | Higgsfield gmail |
-| `yt-channel-channel-<slug>` | YouTube Studio for one specific channel | only that YT channel |
-| `yt-channel-research` | Anonymous research (niche-radar, viral-decoder) | nothing — logged-out browsing |
+| `browser-<owner_id>` (e.g. `browser-nolann`) | Higgsfield UI browsing (fallback if MCP/CLI fails) | the owner's Google account |
+| `browser-yt-<slug>` | YouTube Studio for one specific channel | only that YT channel |
+| `browser-yt-research` | Anonymous research (niche-radar, viral-decoder) | nothing — logged-out browsing |
 
-**Hard rule**: never share profiles between channels. Cross-contamination of cookies = ban risk.
+**Hard rule**: never share a space between channels. Cross-contamination of cookies = ban risk. Spaces are created by the server admin: `python -m stealth_mcp.admin tenant add yt-<slug> --tools basic`, then the `browser-yt-<slug>` server is added to this agent's mcphub group.
 
 ## Creating a new channel
 
 ```bash
 # 1. Create the channel folder + scaffold
 CHANNEL=my-new-niche
-mkdir -p identities/channels/$CHANNEL/{camoufox,uploads}
+mkdir -p identities/channels/$CHANNEL/{browser,uploads}
 
 # 2. Create channel.json (copy template below + edit)
 cat > identities/channels/$CHANNEL/channel.json <<EOF
@@ -66,7 +68,7 @@ cat > identities/channels/$CHANNEL/channel.json <<EOF
   "youtube_channel_url": "",
   "niche_slug": "$CHANNEL",
   "status": "draft",
-  "camoufox_profile": "yt-channel-channel-$CHANNEL",
+  "browser_space": "yt-$CHANNEL",
   "brand_anchor": "identities/channels/$CHANNEL/brand.json",
   "mem0_namespace": "yt-channel.$CHANNEL"
 }
@@ -78,10 +80,11 @@ cp config/brand-default.json identities/channels/$CHANNEL/brand.json
 # 4. Register in _channels.json (or let the agent auto-discover)
 python3 -c "import json; d=json.load(open('identities/_channels.json')); d['channels'].append('$CHANNEL'); json.dump(d, open('identities/_channels.json','w'), indent=2)"
 
-# 5. Setup camoufox profile (manual, 5 min):
-#    Open camoufox with profile yt-channel-channel-$CHANNEL
-#    Login to YouTube as that channel
-#    Close cleanly — cookies persist
+# 5. Setup the browser space (admin + 5 min of the human):
+#    python -m stealth_mcp.admin tenant add yt-$CHANNEL --tools basic   # on the web-stealth server
+#    mcphub: add server browser-yt-$CHANNEL (http://mcp-stealth:9000/mcp, Bearer <token>) to this agent's group
+#    browser-yt-$CHANNEL-browser_open(url="https://studio.youtube.com") + browser_handoff(reason="login", wait=True)
+#    The human logs in to YouTube as that channel through the control link — cookies persist in the space
 ```
 
 ## Session isolation (OpenClaw)
@@ -91,7 +94,7 @@ The `yt-channel-orchestrator` agent has ONE `sessions/` directory under `.opencl
 When a run targets a specific channel, the orchestrator:
 1. Reads `--channel <slug>` from the request (or defaults to the only active channel)
 2. Loads `identities/channels/<slug>/channel.json` + `brand.json`
-3. Passes the channel context to ALL downstream skills (asset-summoner uses the brand, uploader uses the camoufox profile, sentry namespaces metrics)
+3. Passes the channel context to ALL downstream skills (asset-summoner uses the brand, uploader uses the channel's browser space `browser-yt-<slug>`, sentry namespaces metrics)
 4. Logs the channel slug in every `stage_events.payload`
 
 Sessions stay shared (one orchestrator brain) but artifacts are scoped per channel:
@@ -121,7 +124,7 @@ openclaw send yt-channel-orchestrator "stats du canal anime-reactions"
 | Higgsfield account | ✅ | ❌ (one Higgsfield for all channels) |
 | Higgsfield credits budget | ✅ | tracked per channel via cost_eur |
 | Claude API auth | ✅ | ❌ |
-| Camoufox profile | ❌ | ✅ per channel (cookies, YT login) |
+| Stealth browser profile | ❌ | ✅ per channel (cookies, YT login) |
 | Brand style | template default | overridable per channel |
 | mem0 memory | nolann user_id | namespaced sub-keys (yt-channel.\<slug\>) |
 | Niche knowledge | sometimes cross-channel | mostly per channel |

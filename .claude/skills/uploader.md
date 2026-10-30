@@ -1,6 +1,6 @@
 ---
 name: uploader
-description: Upload the rendered Short to YouTube via camoufox (human-like flow) with title, description, tags, thumbnail. Use after thumb-craft + manual approval.
+description: Upload the rendered Short to YouTube via the stealth browser (CloakBrowser, `browser-<space>` MCP servers of web-stealth v3) (human-like flow) with title, description, tags, thumbnail. Use after thumb-craft + manual approval.
 type: agent
 isolation: claude-yt-channel
 ---
@@ -14,15 +14,15 @@ Upload the final.mp4 to YouTube as a Short, set metadata (title, description, ta
 ## Inputs
 
 - `run_id` (required)
-- `channel_profile` (required): camoufox profile name for the target YouTube channel
+- `browser_space` (required): the channel's browser space, from `channel.json::browser_space` (mcphub server `browser-<space>`, e.g. `browser-yt-<slug>`)
 - `thumbnail_choice` (default `v1`): which thumb variant to use
 - `publish_mode` (default `draft`): `draft` | `now` | `schedule:<ISO>`
 
 ## Process
 
-1. Launch camoufox with profile `<channel_profile>` (channel already logged in).
-2. Navigate to YouTube Studio upload page.
-3. Upload `runs/<id>/final.mp4`.
+1. Use the channel's space: every call is `browser-<browser_space>-<tool>` (channel already logged in; verify with `browser_read(mode="find", query="Create")`, else `browser_handoff`).
+2. `browser_open(url="https://studio.youtube.com", tab="studio")`, open the upload dialog with `browser_act`.
+3. Put the file in the space first — `browser_files(action="fetch_url", url=<public URL of final.mp4>, name="final.mp4")` (or `browser_files(action="drop_link")` for a human drop) — then `browser_upload(target="input[type='file']", file="uploads/final.mp4", tab="studio")`. Same for the thumbnail.
 4. Wait for processing.
 5. Fill metadata:
    - Title: from `ideas.title` (truncate to 100 chars, ensure compelling)
@@ -51,7 +51,7 @@ Insert into SQLite `uploads`:
 
 ## Constraints
 
-- camoufox ONLY (no YouTube Data API for MVP)
+- stealth browser (`browser-<space>` MCP, web-stealth v3) ONLY (no YouTube Data API for MVP)
 - Sleep 2-5s between UI actions
 - One upload per session (avoid suspicion)
 - Per-channel daily limit: 3 uploads max

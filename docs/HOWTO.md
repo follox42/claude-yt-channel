@@ -45,16 +45,16 @@ cd dashboard && npm run dev
 
 Leave it running in one terminal. It tails the SQLite db live.
 
-## 3. Camoufox profile setup (manual, once)
+## 3. Browser spaces setup (once)
 
-In a separate terminal with camoufox MCP available:
-1. Launch a camoufox session with profile name `claude-yt-channel`.
-2. Open `https://youtube.com` — accept cookies.
-3. Open `https://higgsfield.ai` — login via Google with your gmail.
-4. Open `https://studio.youtube.com` for each channel you'll upload to (use profile names `channel-<slug>` per channel).
-5. Close camoufox cleanly — cookies persist.
+The stealth browser is web-stealth MCP v3: one isolated *space* (cookies, tabs, files) per bearer token, exposed on mcphub as a server `browser-<space>` (tools `browser-<space>-browser_open`, `-browser_act`, `-browser_upload`, `-browser_handoff`, …).
 
-Sanity check: re-open same profile, navigate to higgsfield, you should still be logged in.
+1. Owner space (`browser-<owner_id>`, e.g. `browser-nolann`): `browser_open(url="https://higgsfield.ai")` then `browser_handoff(reason="Higgsfield login", wait=True)` — log in via Google through the control link.
+2. One space per channel: on the web-stealth server `python -m stealth_mcp.admin tenant add yt-<slug> --tools basic`, add the `browser-yt-<slug>` server (`http://mcp-stealth:9000/mcp`, Bearer) to the agent's mcphub group.
+3. In that space: `browser-yt-<slug>-browser_open(url="https://studio.youtube.com")` + `browser_handoff(...)` — log in as that channel only.
+4. Nothing to close: cookies are persisted by the server (state saved after each navigation).
+
+Sanity check: `browser-yt-<slug>-browser_open(url="https://studio.youtube.com")` then `browser_shot()` — you should still be logged in.
 
 ## 4. Smoke test (already passed)
 
@@ -134,7 +134,7 @@ Soft cap per run: 2 EUR. Hard kill if exceeded (TODO: add budget guard in orches
 | Dashboard "DB error" | Run `python3 pipeline/orchestrator.py --init-db` |
 | Higgsfield login expired | Re-do step 3 above |
 | Remotion render very slow | `Config.setConcurrency(8)` in `remotion.config.ts` |
-| YouTube upload stuck on "processing" | Camoufox needs longer `stay_at_least_ms` — bump to 30s |
+| YouTube upload stuck on "processing" | The stealth browser needs longer `stay_at_least_ms` — bump to 30s |
 
 ## 10. Where to read more
 

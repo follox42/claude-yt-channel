@@ -1,6 +1,6 @@
 ---
 name: niche-radar
-description: Find YouTube niches with RPM >= $5 and small-channel outliers using camoufox on YouTube. Use when discovering a new niche or refreshing the niche pool.
+description: Find YouTube niches with RPM >= $5 and small-channel outliers using the stealth browser (`browser-<space>` MCP, web-stealth v3) on YouTube. Use when discovering a new niche or refreshing the niche pool.
 type: agent
 isolation: claude-yt-channel
 ---
@@ -21,7 +21,7 @@ Identify YouTube niches where a small creator can break in. Output a ranked list
 
 ## Process
 
-1. Open camoufox session with profile `claude-yt-channel` (cookies persisted between runs).
+1. Use the research browser space (`browser-yt-research`, logged-out; web-stealth MCP v3 — cookies persisted between runs by the server): `browser-yt-research-browser_open(url="https://www.youtube.com", tab="radar")`.
 2. Navigate to YouTube. Search for `seed` or browse trending Shorts.
 3. For each candidate niche (~10-20):
    - Open 3-5 top videos from the last 30 days.
@@ -51,11 +51,11 @@ JSON array on stdout AND insert into `niches` table:
 
 ## Constraints
 
-- Use camoufox EXCLUSIVELY (no YouTube API for MVP)
+- Use the stealth browser (`browser-yt-research` MCP server: `browser_open`, `browser_act(action="scroll")`, `browser_read`) EXCLUSIVELY (no YouTube API for MVP)
 - Sleep 2-5s between actions (anti-detect)
 - Max 30 min per run
 - Cap at 20 video opens per session
-- Persist cookies between runs to avoid relogin
+- Cookies persist in the space between runs (nothing to do)
 
 ## Files
 

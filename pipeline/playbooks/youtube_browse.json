@@ -1,7 +1,7 @@
 {
   "name": "youtube_browse",
   "description": "Browse YouTube as a human: search, scroll, open videos, capture metadata. Used by niche-radar and viral-decoder.",
-  "profile": "claude-yt-channel",
+  "browser_space": "yt-research",
   "base_url": "https://www.youtube.com",
   "steps": [
     {

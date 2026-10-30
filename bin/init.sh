@@ -103,9 +103,9 @@ cat > config/owner.json <<EOF
     "user_id": "${MEM0_USER}",
     "mcp_server": "openmemory-${MEM0_USER}"
   },
-  "camoufox": {
-    "_note": "Per-channel profiles isolate cookies. See identities/channels/<slug>/camoufox/.",
-    "global_profile_for_higgsfield_browse": "${WS_NAME}-owner-${OWNER_ID}"
+  "browser": {
+    "_note": "web-stealth MCP v3: one browser space (mcphub server browser-<space>) per channel isolates cookies. See identities/_README.md.",
+    "owner_space": "browser-${OWNER_ID}"
   }
 }
 EOF

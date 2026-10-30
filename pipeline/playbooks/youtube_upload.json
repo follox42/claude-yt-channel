@@ -1,7 +1,7 @@
 {
   "name": "youtube_upload",
-  "description": "Upload a final.mp4 to YouTube Studio as a Short. Channel must be logged in (separate camoufox profile per channel).",
-  "profile": "{{channel_profile}}",
+  "description": "Upload a final.mp4 to YouTube Studio as a Short. Channel must be logged in (web-stealth MCP v3: one browser space per channel, mcphub server browser-<browser_space>; the file must first be placed in the space's uploads/ via browser_files fetch_url or drop_link, then browser_upload).",
+  "browser_space": "{{browser_space}}",
   "base_url": "https://studio.youtube.com",
   "steps": [
     {
@@ -27,7 +27,7 @@
       "id": "select_file",
       "action": "upload",
       "selector": "input[type='file']",
-      "file_path": "{{final_mp4_path}}",
+      "file": "uploads/{{final_mp4_name}}",
       "wait_for": "ytcp-uploads-dialog [aria-label*='title'], textarea[aria-label*='title']",
       "delay_after_ms": [8000, 14000]
     },
