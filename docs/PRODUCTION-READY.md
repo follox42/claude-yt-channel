@@ -107,7 +107,7 @@ The template covers ~85% of a viral pipeline. These items are designed but need 
 → These get built **on demand** when `creative-director` produces a `complexity_score` ≥ 4 OR when a niche's outliers use a style we don't have a component for. Build via `gsd:plan-phase` or directly when needed.
 
 ### Phase 2 — YouTube Data API upload
-The current `uploader` skill uses stealth browser UI automation (CloakBrowser via the `browser` MCP). Cleaner long-term:
+The current `uploader` skill uses stealth browser UI automation (CloakBrowser via the web-stealth MCP v3 `browser-<space>` servers). Cleaner long-term:
 - Setup YT Data API v3 + OAuth flow (`bin/yt-oauth.sh` to add)
 - Get refresh token + scopes (youtube.upload + youtube.readonly)
 - Add to .env: `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`

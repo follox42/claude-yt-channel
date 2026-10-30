@@ -19,7 +19,7 @@ Monitor every published Short's performance and create a feedback signal that id
 ## Process
 
 1. Query SQLite `uploads` for videos to check.
-2. For each, navigate via the stealth browser (`browser` MCP) to YouTube Studio analytics OR the public watch URL.
+2. For each, navigate via the stealth browser (`browser-yt-<slug>` space for Studio analytics, `browser-yt-research` for the public watch URL; `browser_open` + `browser_read(mode="text")`).
 3. Capture:
    - views, likes, comments, avg view %, watch time, audience retention curve
    - first-24h velocity (views per hour)
@@ -52,7 +52,7 @@ Inserted rows in SQLite `metrics` + `runs/<id>/sentry-feedback.json`:
 
 ## Constraints
 
-- stealth browser (`browser` MCP), no API
+- stealth browser (`browser-<space>` MCP, web-stealth v3), no API
 - Check each video at: +1h, +24h, +7d, +30d after upload
 - Anti-detect: vary delays, vary navigation paths
 - Read-only on YouTube (NEVER comment, like, etc. from sentry session)

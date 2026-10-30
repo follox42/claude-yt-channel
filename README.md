@@ -21,7 +21,7 @@ Isolated test project — autonomous AI pipeline producing faceless YouTube Shor
 |---|---|---|
 | Agents | Claude Code skills (local `.claude/skills/`) | Project-scoped, isolated |
 | Orchestration | Python 3.12 + asyncio | Simple, fast iteration |
-| Browser auto | stealth browser playbooks via `browser` MCP (CloakBrowser — YouTube + Higgsfield) | Human-like, anti-detect |
+| Browser auto | stealth browser playbooks via the `browser-<space>` MCP servers (web-stealth v3, CloakBrowser — YouTube + Higgsfield) | Human-like, anti-detect |
 | Editing | **Remotion v4** (React/TS, headless ffmpeg render) — uses official `npx remotion skills add` for Claude Code integration. **Also exposed as OpenClaw tool `yt_channel_render_short`** | Anthropic-endorsed in 2026 |
 | Dashboard | **OpenClaw native plugin** at `/__openclaw__/yt-channel/` — vanilla HTML + SQLite + WS. **Zero `npm run dev`** | Lives inside OpenClaw |
 | Asset gen | **Higgsfield MCP** (`mcp__mcphub__higgsfield-*`) via mcphub | Native tool calls, OAuth gmail |
@@ -36,10 +36,10 @@ Isolated test project — autonomous AI pipeline producing faceless YouTube Shor
 | 2 | `viral-decoder` | Extract narrative formula from top 3 outliers in chosen niche | inspired by script-extractor + content-dna |
 | 3 | `idea-forge` | Generate 10-30 short ideas matching the decoded formula | inspired by content-ideator |
 | 4 | `script-smith` | Write 30-60s short script with scene-by-scene breakdown | new |
-| 5 | `asset-summoner` | Drive Higgsfield via the stealth browser (`browser` MCP) to generate images + image-to-video | new |
+| 5 | `asset-summoner` | Drive Higgsfield via the stealth browser (`browser-<space>` MCP, web-stealth v3) to generate images + image-to-video | new |
 | 6 | `render-engine` | Compose final Short in Remotion (text overlays, scene timing, music) | new |
 | 7 | `thumb-craft` | Generate Short thumbnail (3 variants for A/B) | new |
-| 8 | `uploader` | Upload to YouTube via the stealth browser (`browser` MCP) (title + tags + thumbnail + schedule) | new |
+| 8 | `uploader` | Upload to YouTube via the stealth browser (`browser-<space>` MCP, web-stealth v3) (title + tags + thumbnail + schedule) | new |
 | 9 | `sentry` | Track post-publish metrics, feedback loop to idea-forge | inspired by analytics-tracker |
 
 ## Budget (max 20 EUR/month target)
@@ -70,7 +70,7 @@ Isolated test project — autonomous AI pipeline producing faceless YouTube Shor
 ### Phase 2 — Semi-auto (Weeks 2-4)
 - niche-radar autonomous weekly
 - thumb-craft auto with A/B
-- uploader auto via the stealth browser (`browser` MCP)
+- uploader auto via the stealth browser (`browser-<space>` MCP, web-stealth v3)
 - Goal: 3 Shorts/week, 1 channel
 
 ### Phase 3 — Multi-channel loop (Weeks 5-8)
@@ -89,7 +89,7 @@ Isolated test project — autonomous AI pipeline producing faceless YouTube Shor
 ## Files
 
 - `.claude/skills/*.md` — agent skill definitions (isolated, inspired-not-copied)
-- `pipeline/playbooks/*.json` — stealth browser playbooks for the `browser` MCP (YouTube only — Higgsfield uses MCP now)
+- `pipeline/playbooks/*.json` — stealth browser playbooks for the `browser-<space>` MCP servers (web-stealth v3) (YouTube only — Higgsfield uses MCP now)
 - `pipeline/orchestrator.py` — main pipeline driver
 - `remotion/` — video composition project (also reachable via OpenClaw tool `yt_channel_render_short`)
 - `plugin/` — **OpenClaw native plugin (the new dashboard home)**

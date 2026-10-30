@@ -17,8 +17,8 @@
     "user_id": "__REPLACE_ME__",
     "mcp_server": "openmemory-__REPLACE_ME__"
   },
-  "camoufox": {
-    "_note": "Per-channel profiles isolate cookies. See identities/channels/<slug>/camoufox/.",
-    "global_profile_for_higgsfield_browse": "yt-channel-os-owner-__REPLACE_ME__"
+  "browser": {
+    "_note": "web-stealth MCP v3: one browser space (mcphub server browser-<space>) per channel isolates cookies. See identities/_README.md.",
+    "owner_space": "browser-__REPLACE_ME__"
   }
 }

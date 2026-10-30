@@ -1,6 +1,6 @@
 ---
 name: meta-flow-gen
-description: ZERO-COST unlimited image and video generation via Meta AI (meta.ai) and Google Flow (Nano Banana model). Drives via stealth browser automation (CloakBrowser, `browser` MCP). Used as Tier 0 fallback before consuming Higgsfield credits.
+description: ZERO-COST unlimited image and video generation via Meta AI (meta.ai) and Google Flow (Nano Banana model). Drives via stealth browser automation (CloakBrowser, `browser-<space>` MCP servers of web-stealth v3). Used as Tier 0 fallback before consuming Higgsfield credits.
 type: agent
 isolation: project
 ---
@@ -32,19 +32,22 @@ Both services require browser login (Google SSO) but no paid plan. Once cookies 
 
 ### Setup (one-time)
 
-```bash
-# Open the stealth browser to Meta AI, login with Google
-browser-stealth-navigate "https://www.meta.ai" --cookie_profile meta-ai-default
+```
+# Open Meta AI in the owner's browser space (web-stealth MCP v3: one mcphub server per
+# person/space, e.g. `browser-nolann`; tool names are browser-<space>-<tool>)
+browser-<space>-browser_open(url="https://www.meta.ai", tab="meta")
+browser-<space>-browser_handoff(reason="Meta AI: login with Google", minutes=15, wait=True)
 
 # Then Google Flow
-browser-stealth-navigate "https://labs.google/fx/tools/flow" --cookie_profile google-flow-default
+browser-<space>-browser_open(url="https://labs.google/fx/tools/flow", tab="flow")
+browser-<space>-browser_handoff(reason="Google Flow: login with Google", minutes=15, wait=True)
 ```
 
-User logs in once via the stealth browser session, cookies saved. Subsequent runs auto-login.
+The user logs in once through the handoff link (the agent never types passwords); cookies are persisted in the space. Subsequent runs auto-login. There are no named cookie profiles any more: a space = one person's cookie jar.
 
 ### Image generation (Meta AI)
 
-1. Navigate to `https://www.meta.ai/?prompt=<encoded_prompt>` with `cookie_profile=meta-ai-default`
+1. `browser_open(url="https://www.meta.ai/?prompt=<encoded_prompt>", tab="meta")` (cookies come from the space)
 2. Toggle "Create image" if not on
 3. If reference image: upload via the attachment button
 4. Send prompt + optional aspect ratio instruction (e.g. "9:16 vertical")
@@ -53,7 +56,7 @@ User logs in once via the stealth browser session, cookies saved. Subsequent run
 
 ### Image generation (Google Flow / Nano Banana)
 
-1. Navigate to `https://labs.google/fx/tools/flow/project/<random-uuid>` with `cookie_profile=google-flow-default`
+1. Navigate to `https://labs.google/fx/tools/flow/project/<random-uuid>` in the owner's space (`tab="flow"`; cookies come from the space)
 2. Select Nano Banana model (default for new projects)
 3. Paste prompt
 4. Set aspect ratio
@@ -84,7 +87,7 @@ density than per-scene generation.
 Saves to `runs/<run_id>/assets/scene_<n>/`:
 - `image.png` (if image)
 - `video.mp4` (if video)
-- `metadata.json` with `provider`, `cookie_profile`, `prompt`, `duration_sec`, `model_used`
+- `metadata.json` with `provider`, `browser_space`, `prompt`, `duration_sec`, `model_used`
 
 ## Constraints
 
@@ -123,11 +126,11 @@ Saves to `runs/<run_id>/assets/scene_<n>/`:
 
 ## Files
 
-- Reads: `runs/<id>/script.json`, `creative-bible.json`, stealth browser cookie profiles
+- Reads: `runs/<id>/script.json`, `creative-bible.json`, the browser space's persisted logins
 - Writes: `runs/<id>/assets/scene_<n>/`, `runs/<id>/assets/manifest.json`
 
 ## Tools used
 
-- `browser` MCP: browser-stealth_navigate + browser-stealth_click + browser-stealth_type
-- stealth browser cookie profile persistence
+- `browser-<space>` MCP (web-stealth v3): `browser_open` + `browser_read(mode="find")` + `browser_act(action="click"|"type")` + `browser_upload` (reference image: `browser_files(action="fetch_url")` first) + `browser_files` to retrieve generated media (signed links)
+- per-space cookie persistence (automatic)
 - ffmpeg for any conversion needed (aspect, codec)

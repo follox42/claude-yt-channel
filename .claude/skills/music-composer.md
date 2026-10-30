@@ -51,7 +51,7 @@ Provide one or more music tracks for a video that match the channel's `creative-
 3. If `mode == "stock-library"`:
    a. Read script.json → group scenes by type (hook/buildup/payoff/outro).
    b. For each scene type, query in tier order:
-      - **YT Audio Library** (Tier 0, no key) — navigate via the stealth browser to `studio.youtube.com/audio` with cookie_profile=channel-specific, filter by genre + mood, download MP3 directly. ⭐ DEFAULT
+      - **YT Audio Library** (Tier 0, no key) — navigate via the channel's browser space (`browser-yt-<slug>-browser_open`) to `studio.youtube.com/audio`, filter by genre + mood, download the MP3 into the space (`browser_files(action="list")` then `browser_files(action="link", path=...)` to fetch it). ⭐ DEFAULT
       - **Pixabay scrape** (Tier 0, no API) — stealth browser to `pixabay.com/music/?q=<genre>` if YT Library has no match.
       - **Pixabay API** (Tier 1, free key) — `https://pixabay.com/api/videos/music/?q=<genre>` if key in .env
       - **Suno API** (Tier 1, paid) — generates exact-duration custom track if voice-sync precision needed

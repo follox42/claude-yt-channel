@@ -144,7 +144,7 @@ Always record source + license in the manifest. Reject if license is unclear.
 - `yt-dlp` — archive.org video + YouTube CC search
 - `ffmpeg` — conversion, trimming, aspect fixing
 - `jq` — JSON parsing
-- `browser` MCP (stealth browser, CloakBrowser) — scraping fallback if APIs fail
+- `browser-<space>` MCP servers (web-stealth v3 stealth browser, CloakBrowser) — scraping fallback if APIs fail
 
 ## What makes this design robust
 

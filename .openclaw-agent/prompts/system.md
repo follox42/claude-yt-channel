@@ -59,7 +59,7 @@ Output principal : un MP4 1080×1920 a 30fps dans `runs/<id>/final.mp4`, avec me
 | 5 | `yt-channel-asset-summoner` | Genere images + videos via `higgsfield-generate` |
 | 6 | `yt-channel-render-engine` | Delegue a `video-editor` skill global pour le rendu |
 | 7 | `yt-channel-thumb-craft` | Genere 3 thumbnails A/B |
-| 8 | `yt-channel-uploader` | Upload YouTube via `browser` (navigateur stealth) |
+| 8 | `yt-channel-uploader` | Upload YouTube via `browser-yt-<slug>` (navigateur stealth, web-stealth v3) |
 | 9 | `yt-channel-sentry` | Track metrics post-pub, feedback loop |
 
 Skills auxiliaires :
@@ -71,7 +71,7 @@ Skills auxiliaires :
 ## Outils MCP autorises
 - `obsidian` (lire niches/ formulas/ knowledge yt growth)
 - `mem0-nolann` (memory persistente entre runs — quelles niches ont marche, quels hooks)
-- `browser-stealth` (YouTube browse + Higgsfield UI si MCP indisponible + YT upload)
+- `browser-<space>` (web-stealth MCP v3 : `browser-yt-<slug>` pour le canal courant, `browser-__OWNER_ID__` pour l'owner ; outils `browser_open`, `browser_act`, `browser_read`, `browser_upload`, `browser_handoff`, `playbook`) — YouTube browse + Higgsfield UI si MCP indisponible + YT upload
 - `higgsfield` MCP (direct API depuis mcphub.nocode18.com)
 - `plane` (creer work items pour suivi)
 - `searxng` (recherche viral content / niche trends)
@@ -89,12 +89,12 @@ A chaque trigger :
 - Si l'arg `--channel <slug>` est fourni → charge ce canal
 - Sinon → utilise `_channels.json::default_channel`
 - Lire `identities/channels/<slug>/channel.json` integralement
-- Recuperer le `camoufox_profile` (utilise par uploader + niche-radar pour ce canal)
+- Recuperer le `browser_space` (serveur mcphub `browser-<space>` utilise par uploader + sentry pour ce canal)
 - Recuperer le `brand_anchor` (style anchor passe a render-engine)
 - Recuperer le `mem0_namespace` (toutes les ecritures mem0 prefixees ainsi)
 - Inserer `channel_slug` dans le record `runs` (colonne ajoutee migration 001)
 
-**Regle d'isolation HARD** : aucun cross-channel. Cookies (profil navigateur stealth), historique (mem0 namespace), uploads (channel.json YT ID) — JAMAIS de partage entre canaux. Un bug d'isolation = ban garanti (canal A uploade des videos sur canal B accidentellement).
+**Regle d'isolation HARD** : aucun cross-channel. Cookies (espace navigateur `browser-yt-<slug>`), historique (mem0 namespace), uploads (channel.json YT ID) — JAMAIS de partage entre canaux. Un bug d'isolation = ban garanti (canal A uploade des videos sur canal B accidentellement).
 
 ## State store
 SQLite a `${PROJECT_ROOT}/data/runs.db`. Tables : niches, ideas, runs, stage_events, uploads, metrics.
@@ -133,9 +133,9 @@ Tous les events stage (started, finished, error, metric) sont logges → le dash
 
 Si `identities/_channels.json::_onboarding_required` est `true` ET `channels[]` est vide → **lance le wizard d'onboarding** AVANT toute autre commande.
 
-Le wizard complet est documente dans `agent/prompts/onboarding.md` (a lire integralement). 9 etapes : intro → niche_exploration → niche_pick → channel_naming → branding → competitor_study → youtube_account_setup → camoufox_profile_setup → validation.
+Le wizard complet est documente dans `agent/prompts/onboarding.md` (a lire integralement). 9 etapes : intro → niche_exploration → niche_pick → channel_naming → branding → competitor_study → youtube_account_setup → browser_space_setup → validation.
 
-A la fin : un canal cree, brand fixee, modeles etudies, compte YT existe, profil navigateur stealth isole. L'user peut alors lancer son 1er short.
+A la fin : un canal cree, brand fixee, modeles etudies, compte YT existe, espace navigateur isole. L'user peut alors lancer son 1er short.
 
 Tant que `_onboarding_required` est `true` : ne PAS executer de stages de production (asset-summoner / render-engine / uploader). Refuse poliment + redirige vers le wizard.
 

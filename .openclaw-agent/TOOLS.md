@@ -18,24 +18,25 @@
 - Namespace de cet agent : prefixer toutes les writes avec `yt-channel.<channel_slug>.`
 
 ### YouTube
-- Aucun OAuth Data API v3 pour le MVP — tout passe par le navigateur stealth (CloakBrowser, MCP `browser`)
-- Chaque canal a son profil navigateur stealth dedie (voir ci-dessous)
+- Aucun OAuth Data API v3 pour le MVP — tout passe par le navigateur stealth (CloakBrowser, web-stealth MCP v3, serveurs mcphub `browser-<space>`)
+- Chaque canal a son espace navigateur dedie (voir ci-dessous)
 
-## Profils navigateur stealth (regle HARD : jamais de cross-channel)
+## Espaces navigateur (regle HARD : jamais de cross-channel)
 
-| Profile | Logged into | Usage |
+Le navigateur stealth v3 a un espace (cookies, onglets, fichiers) par token ; chaque espace est un serveur mcphub `browser-<space>` et ses outils s'appellent `browser-<space>-browser_open`, `-browser_act`, `-browser_read`, `-browser_shot`, `-browser_upload`, `-browser_files`, `-browser_handoff`, `-playbook`… Plus de parametre `profile` / `cookie_profile` : l'espace EST l'identite.
+
+| Espace (serveur mcphub) | Logged into | Usage |
 |---|---|---|
-| `yt-channel-owner-__OWNER_ID__` | Higgsfield UI (gmail SSO fallback) | Fallback si CLI/MCP fail |
-| `yt-channel-channel-<slug>` | YouTube Studio de CE canal | Upload + sentry pour ce canal seulement |
-| `yt-channel-research` | rien (logged-out) | niche-radar + viral-decoder anonymes |
+| `browser-__OWNER_ID__` | Higgsfield UI (gmail SSO fallback), compte de l'owner | Fallback si CLI/MCP fail |
+| `browser-yt-<slug>` | YouTube Studio de CE canal | Upload + sentry pour ce canal seulement |
+| `browser-yt-research` | rien (logged-out) | niche-radar + viral-decoder anonymes |
 
-**Setup d'un nouveau profile (manual, ~5 min) :**
-1. `mcp__browser-stealth_profiles list` — verifier qu'il n'existe pas
-2. Ouvrir le navigateur stealth avec le profile (via le MCP `browser`)
-3. Naviguer vers YouTube Studio (ou Higgsfield)
-4. Login manuel
-5. Fermer proprement
-6. Les cookies persistent dans le profil `<profile>` du MCP `browser`
+**Setup d'un nouvel espace (admin, ~5 min) :**
+1. `browser-yt-<slug>-browser_status` — verifier qu'il n'existe pas deja (erreur = pas de serveur)
+2. Sur le serveur web-stealth : `python -m stealth_mcp.admin tenant add yt-<slug> --tools basic` (token affiche une seule fois)
+3. Dans mcphub : serveur `browser-yt-<slug>` (streamable-http, `http://mcp-stealth:9000/mcp`, `Authorization: Bearer <token>`), ajoute au groupe de cet agent
+4. `browser-yt-<slug>-browser_open(url="https://studio.youtube.com")` puis `browser-yt-<slug>-browser_handoff(reason="Login YouTube Studio <slug>", wait=True)` — login manuel par l'humain via le lien de controle
+5. Les cookies persistent dans l'espace ; rien a fermer (le serveur gere les onglets inactifs)
 
 ## Workspace paths cles
 
@@ -56,7 +57,7 @@
 | `asset-summoner` | Stage 5 — appelle `higgsfield-generate` pour chaque scene |
 | `render-engine` | Stage 6 — delegue au skill global `video-editor` |
 | `thumb-craft` | Stage 7 — 3 variantes thumbnail |
-| `uploader` | Stage 8 (full mode only) — upload via navigateur stealth |
+| `uploader` | Stage 8 (full mode only) — upload via `browser-yt-<slug>` |
 | `sentry` | Stage 9 — track metrics post-pub |
 | **higgsfield-generate** | Direct invoque par asset-summoner |
 | **higgsfield-soul-id** | Si character consistency multi-scenes |
@@ -74,7 +75,7 @@
 
 ## MCP servers utiles (mcphub.nocode18.com)
 
-- `browser` — stealth browser (CloakBrowser)
+- `browser-<space>` — stealth browser (web-stealth v3, CloakBrowser) : `browser-__OWNER_ID__`, `browser-yt-<slug>`
 - `higgsfield` — image/video gen (alternative au CLI)
 - `obsidian` — vault __OWNER_NAME__ (knowledge / niches / formulas)
 - `openmemory-__OWNER_ID__` — mem0 namespace

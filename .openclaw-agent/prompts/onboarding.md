@@ -158,24 +158,22 @@ Donne les instructions exactes :
 Quand l'user colle l'URL :
 - Extract le `youtube_channel_id` (UC...)
 - Update `channel.json::youtube_channel_id` + `youtube_channel_url`
-- Update `_onboarding.step = "camoufox_profile_setup"`
+- Update `_onboarding.step = "browser_space_setup"`
 
-### 8. `camoufox_profile_setup` — profil isole
+### 8. `browser_space_setup` — espace navigateur isole
 
-> Maintenant on isole les cookies de ce canal du reste de ta vie. Etapes :
+> Maintenant on isole les cookies de ce canal du reste de ta vie. Le navigateur stealth (web-stealth MCP v3) a **un espace par personne** : cookies, onglets et fichiers ne sont jamais partages entre espaces. Pour ce canal on utilise un espace dedie, `yt-<slug>`, expose sur mcphub comme serveur `browser-yt-<slug>`. Etapes :
 >
-> 1. Ouvre le navigateur stealth (CloakBrowser) avec le profil `yt-channel-channel-<slug>` :
->    via le MCP `browser` (`browser-stealth_profiles`)
-> 2. Dans cette session du navigateur stealth, va sur https://studio.youtube.com
-> 3. Login avec le compte Google qui possede le canal qu'on vient de creer
-> 4. Verifie que c'est le bon canal en haut a droite
-> 5. Ferme le navigateur stealth proprement (Cmd+Q / Ctrl+Q, pas force-quit)
+> 1. (Admin, une fois) Creer l'espace : `python -m stealth_mcp.admin tenant add yt-<slug> --tools basic` puis ajouter le serveur `browser-yt-<slug>` (URL interne `http://mcp-stealth:9000/mcp`, Bearer affiche une seule fois) au groupe mcphub de cet agent.
+> 2. Je lance `browser-yt-<slug>-browser_open(url="https://studio.youtube.com", tab="studio")` puis `browser-yt-<slug>-browser_handoff(reason="Login YouTube Studio du canal <slug>", minutes=15, wait=True)`.
+> 3. Tu recois un lien de controle : connecte-toi avec le compte Google qui possede le canal qu'on vient de creer.
+> 4. Verifie que c'est le bon canal en haut a droite, puis clique « J'ai fini ».
 >
-> Les cookies persistent dans le profil `yt-channel-channel-<slug>` du MCP `browser`. Plus jamais besoin de relogin.
+> Les cookies persistent dans l'espace `yt-<slug>`. Plus jamais besoin de relogin.
 >
 > Confirme-moi quand c'est fait.
 
-Si l'user a besoin, tu peux faire le test du navigateur stealth toi-meme (navigate, screenshot) pour verifier le login persiste.
+Si l'user a besoin, tu peux faire le test toi-meme (`browser_open` + `browser_shot`) pour verifier que le login persiste. Si un seul espace existe (ex. `browser-nolann`), tous les canaux de cette personne partagent ses cookies Google : basculer de canal via le selecteur de compte de YouTube Studio et **verifier le canal actif avant chaque upload**.
 
 Update `_onboarding.step = "validation"`.
 
@@ -187,7 +185,7 @@ Verifie automatiquement :
 - [ ] `youtube_channel_id` rempli + commence par UC
 - [ ] `brand.json` reflete les choix de l'user (etape 5)
 - [ ] `formula.json` existe (etape 6)
-- [ ] Profil navigateur stealth `yt-channel-channel-<slug>` cree (test : `browser-stealth_profiles list`)
+- [ ] Espace navigateur `yt-<slug>` cree et accessible (test : `browser-yt-<slug>-browser_status` repond `"tenant": "yt-<slug>"`)
 - [ ] `_channels.json::channels[]` contient `<slug>`
 - [ ] `_channels.json::default_channel` = `<slug>` (si c'est le 1er canal)
 - [ ] `_channels.json::_onboarding_required` = `false`
@@ -224,5 +222,5 @@ Update `_onboarding.status = "completed"`.
 - Sauter des etapes ("je te cree le channel.json en aveugle") → toujours demander confirmation pour les choix de marque
 - Proposer 1 seule niche → toujours 3-5 minimum
 - Inventer des noms de canaux sans verifier dispo handle YT
-- Oublier le profil navigateur stealth → cross-contamination de cookies = ban
+- Oublier l'espace navigateur dedie → cross-contamination de cookies = ban
 - Lancer un short en mode `_onboarding.status != "completed"` → refuser et finir l'onboarding d'abord
